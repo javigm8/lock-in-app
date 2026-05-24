@@ -1,0 +1,20 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Java
+*.class
+*.jar
+target/
+
+# Node / React
+node_modules/
+dist/
+build/
+.env
+
+# Logs
+*.log
