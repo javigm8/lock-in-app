@@ -26,6 +26,7 @@ public class Usuario {
     private String passwordHash;
 
     @Column(columnDefinition = "json") //Definición explícita del tipo de datos esperado
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     private String configuracion;
 
     @Column(name = "fecha_registro", nullable = false)
