@@ -1,5 +1,6 @@
 package com.lockin.backend.controller;
 
+import com.lockin.backend.dto.NotaDTO;
 import com.lockin.backend.model.Nota;
 import com.lockin.backend.model.Usuario;
 import com.lockin.backend.service.NotaService;
@@ -21,21 +22,24 @@ public class NotaController {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public List<Nota> findByUsuario(@PathVariable Integer idUsuario) {
+    public List<NotaDTO> findByUsuario(@PathVariable Integer idUsuario) {
         Usuario usuario = usuarioService.findById(idUsuario).orElseThrow();
-        return notaService.findByUsuario(usuario);
+        return notaService.findByUsuario(usuario)
+                .stream()
+                .map(NotaDTO::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Nota> findById(@PathVariable Integer id) {
+    public ResponseEntity<NotaDTO> findById(@PathVariable Integer id) {
         return notaService.findById(id)
-                .map(ResponseEntity::ok)
+                .map(nota -> ResponseEntity.ok(new NotaDTO(nota)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Nota save(@RequestBody Nota nota) {
-        return notaService.save(nota);
+    public NotaDTO save(@RequestBody Nota nota) {
+        return new NotaDTO(notaService.save(nota));
     }
 
     @DeleteMapping("/{id}")

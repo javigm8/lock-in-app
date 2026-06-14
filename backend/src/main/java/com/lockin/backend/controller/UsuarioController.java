@@ -1,5 +1,6 @@
 package com.lockin.backend.controller;
 
+import com.lockin.backend.dto.UsuarioDTO;
 import com.lockin.backend.model.Usuario;
 import com.lockin.backend.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +19,23 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> findAll() {
-        return usuarioService.findAll();
+    public List<UsuarioDTO> findAll() {
+        return usuarioService.findAll()
+                .stream()
+                .map(UsuarioDTO::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> findById(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
         return usuarioService.findById(id)
-                .map(ResponseEntity::ok)
+                .map(usuario -> ResponseEntity.ok(new UsuarioDTO(usuario)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Usuario save(@RequestBody Usuario usuario) {
-        return usuarioService.save(usuario);
+    public UsuarioDTO save(@RequestBody Usuario usuario) {
+        return new  UsuarioDTO(usuarioService.save(usuario));
     }
 
     @DeleteMapping("/{id}")

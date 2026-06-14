@@ -1,5 +1,6 @@
 package com.lockin.backend.controller;
 
+import com.lockin.backend.dto.PizarraDTO;
 import com.lockin.backend.model.Pizarra;
 import com.lockin.backend.model.Usuario;
 import com.lockin.backend.service.PizarraService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pizarras")
@@ -21,14 +23,18 @@ public class PizarraController {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public List<Pizarra> findByUsuario(@PathVariable Integer idUsuario) {
+    public List<PizarraDTO> findByUsuario(@PathVariable Integer idUsuario) {
         Usuario usuario = usuarioService.findById(idUsuario).orElseThrow();
-        return pizarraService.findByUsuario(usuario);
+        return pizarraService.findByUsuario(usuario)
+                .stream()
+                .map(PizarraDTO::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pizarra> findById(@PathVariable Integer id) {
+    public ResponseEntity<PizarraDTO> findById(@PathVariable Integer id) {
         return pizarraService.findById(id)
+                .map(PizarraDTO::new)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

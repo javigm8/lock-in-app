@@ -1,11 +1,13 @@
 package com.lockin.backend.controller;
 
+import com.lockin.backend.dto.RecordatorioDTO;
 import com.lockin.backend.model.Recordatorio;
 import com.lockin.backend.model.Usuario;
 import com.lockin.backend.service.RecordatorioService;
 import com.lockin.backend.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -21,14 +23,18 @@ public class RecordatorioController {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public List<Recordatorio> findByUsuario(@PathVariable Integer idUsuario) {
+    public List<RecordatorioDTO> findByUsuario(@PathVariable Integer idUsuario) {
         Usuario usuario = usuarioService.findById(idUsuario).orElseThrow();
-        return recordatorioService.findByUsuario(usuario);
+        return recordatorioService.findByUsuario(usuario)
+                .stream()
+                .map(RecordatorioDTO::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recordatorio> findById(@PathVariable Integer id) {
+    public ResponseEntity<RecordatorioDTO> findById(@PathVariable Integer id) {
         return recordatorioService.findById(id)
+                .map(RecordatorioDTO::new)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
