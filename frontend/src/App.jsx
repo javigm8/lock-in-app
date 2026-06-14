@@ -1,10 +1,12 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Login from './pages/Login'
 
 function App() {
   return (
-    <div>
-      <h1>Lock In!</h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+    </Routes>
   )
 }
 
