@@ -1,111 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Home,
+  ClipboardList,
+  Timer,
+  StickyNote,
+  LayoutDashboard,
+  BarChart2,
+  Settings,
+  LogOut,
+  User,
+  Plus,
+  Trash2,
+  Check,
+  Play,
+  Pause,
+  RotateCcw,
+} from "lucide-react";
 import "./Dashboard.css";
-
-const Icon = ({ name, size = 22 }) => {
-  const paths = {
-    home: (
-      <>
-        <path d="M3 10.5 12 3l9 7.5" />
-        <path d="M5 9.5V21h14V9.5" />
-        <path d="M9 21v-7h6v7" />
-      </>
-    ),
-    tasks: (
-      <>
-        <rect x="5" y="3" width="14" height="18" rx="2" />
-        <path d="M9 3.5h6" />
-        <path d="m8 10 1.5 1.5L12 9" />
-        <path d="M14 10h3" />
-        <path d="m8 15 1.5 1.5L12 14" />
-        <path d="M14 15h3" />
-      </>
-    ),
-    timer: (
-      <>
-        <circle cx="12" cy="13" r="8" />
-        <path d="M12 9v4l3 2" />
-        <path d="M9 2h6" />
-        <path d="M12 2v3" />
-      </>
-    ),
-    notes: (
-      <>
-        <path d="M5 3h14v18H5z" />
-        <path d="M8 7h8M8 11h8M8 15h5" />
-      </>
-    ),
-    board: (
-      <>
-        <path d="M4 4h16v14H4z" />
-        <path d="M8 22h8M12 18v4" />
-      </>
-    ),
-    stats: (
-      <>
-        <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
-      </>
-    ),
-    settings: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.55V21h-3v-.09A1.7 1.7 0 0 0 10.68 19a1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15.34a1.7 1.7 0 0 0-1.55-1.03H5v-3h.45A1.7 1.7 0 0 0 7 10.28a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.12-2.12.06.06A1.7 1.7 0 0 0 10.66 6a1.7 1.7 0 0 0 1.03-1.55V4h3v.45A1.7 1.7 0 0 0 15.72 6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.55 1.03H21v3h-.09A1.7 1.7 0 0 0 19.4 15Z" />
-      </>
-    ),
-    user: (
-      <>
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 21a8 8 0 0 1 16 0" />
-      </>
-    ),
-    logout: (
-      <>
-        <path d="M10 17l5-5-5-5" />
-        <path d="M15 12H3" />
-        <path d="M14 3h7v18h-7" />
-      </>
-    ),
-    plus: (
-      <>
-        <path d="M12 5v14M5 12h14" />
-      </>
-    ),
-    trash: (
-      <>
-        <path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14" />
-      </>
-    ),
-    check: <path d="m5 12 4 4L19 6" />,
-    play: <path d="m8 5 11 7-11 7Z" />,
-    pause: (
-      <>
-        <path d="M9 5v14M15 5v14" />
-      </>
-    ),
-    reset: (
-      <>
-        <path d="M4 12a8 8 0 1 0 2.34-5.66L4 8" />
-        <path d="M4 3v5h5" />
-      </>
-    ),
-  };
-
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {paths[name]}
-    </svg>
-  );
-};
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -118,9 +30,9 @@ function Dashboard() {
 
   const [usuarioActual] = useState(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
-
     return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
   });
+
   const [notes, setNotes] = useState(() => {
     return localStorage.getItem("lockin_notes") || "";
   });
@@ -194,10 +106,8 @@ function Dashboard() {
           clearInterval(timer);
           setRunning(false);
           setSessionCount((currentCount) => currentCount + 1);
-
           return 25 * 60;
         }
-
         return currentSeconds - 1;
       });
     }, 1000);
@@ -214,7 +124,6 @@ function Dashboard() {
   const timeLabel = useMemo(() => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
     const remainingSeconds = String(seconds % 60).padStart(2, "0");
-
     return `${minutes}:${remainingSeconds}`;
   }, [seconds]);
 
@@ -222,7 +131,6 @@ function Dashboard() {
     event.preventDefault();
 
     const text = newTask.trim();
-
     if (!text || !usuarioActual?.id) {
       return;
     }
@@ -305,6 +213,15 @@ function Dashboard() {
     navigate("/");
   };
 
+  const navItems = [
+    { icon: <Home size={22} />, label: "Inicio", active: true },
+    { icon: <ClipboardList size={22} />, label: "Tareas" },
+    { icon: <Timer size={22} />, label: "Temporizador" },
+    { icon: <StickyNote size={22} />, label: "Notas" },
+    { icon: <LayoutDashboard size={22} />, label: "Pizarra" },
+    { icon: <BarChart2 size={22} />, label: "Estadísticas" },
+  ];
+
   return (
     <div className="dashboard-shell">
       <aside className="sidebar" aria-label="Navegación principal">
@@ -313,14 +230,7 @@ function Dashboard() {
         </button>
 
         <nav className="sidebar-nav">
-          {[
-            ["home", "Inicio", true],
-            ["tasks", "Tareas", false],
-            ["timer", "Temporizador", false],
-            ["notes", "Notas", false],
-            ["board", "Pizarra", false],
-            ["stats", "Estadísticas", false],
-          ].map(([icon, label, active]) => (
+          {navItems.map(({ icon, label, active }) => (
             <button
               key={label}
               type="button"
@@ -328,7 +238,7 @@ function Dashboard() {
               title={label}
               aria-label={label}
             >
-              <Icon name={icon} />
+              {icon}
             </button>
           ))}
         </nav>
@@ -340,7 +250,7 @@ function Dashboard() {
             title="Ajustes"
             aria-label="Ajustes"
           >
-            <Icon name="settings" />
+            <Settings size={22} />
           </button>
 
           <button
@@ -350,7 +260,7 @@ function Dashboard() {
             aria-label="Cerrar sesión"
             onClick={logout}
           >
-            <Icon name="logout" />
+            <LogOut size={22} />
           </button>
         </div>
       </aside>
@@ -359,7 +269,6 @@ function Dashboard() {
         <header className="topbar">
           <div>
             <p className="eyebrow">Panel principal</p>
-
             <h1>
               Lock <span>In!</span>
             </h1>
@@ -367,7 +276,6 @@ function Dashboard() {
 
           <div className="topbar-center">
             <span className={`focus-dot ${running ? "running" : ""}`} />
-
             <strong>
               {running ? "Sesión en curso" : "Listo para concentrarte"}
             </strong>
@@ -378,9 +286,8 @@ function Dashboard() {
               <strong>¡Hola, {usuarioActual?.nombre || "Usuario"}!</strong>
               <span>Modo concentración</span>
             </div>
-
             <span className="avatar">
-              <Icon name="user" size={20} />
+              <User size={20} />
             </span>
           </button>
         </header>
@@ -390,10 +297,8 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Organización</span>
-
                 <h2>Tareas</h2>
               </div>
-
               <span className="panel-badge">
                 {completed}/{tasks.length}
               </span>
@@ -407,21 +312,20 @@ function Dashboard() {
                 placeholder="Añadir una nueva tarea..."
                 aria-label="Nueva tarea"
               />
-
               <button type="submit" aria-label="Añadir tarea">
-                <Icon name="plus" size={19} />
+                <Plus size={19} />
               </button>
             </form>
 
             <div className="task-list">
-              {tasks.length === 0 && (
-                <p className="empty-state">No tienes tareas guardadas.</p>
-              )}
               {loadingTasks && (
                 <p className="empty-state">Cargando tareas...</p>
               )}
-
+              {!loadingTasks && tasks.length === 0 && (
+                <p className="empty-state">No tienes tareas guardadas.</p>
+              )}
               {tasksError && <p className="empty-state">{tasksError}</p>}
+
               {tasks.map((task) => (
                 <div
                   className={`task-item ${task.done ? "done" : ""}`}
@@ -435,7 +339,7 @@ function Dashboard() {
                       task.done ? "Marcar como pendiente" : "Completar tarea"
                     }
                   >
-                    {task.done && <Icon name="check" size={15} />}
+                    {task.done && <Check size={15} />}
                   </button>
 
                   <span>{task.text}</span>
@@ -446,7 +350,7 @@ function Dashboard() {
                     onClick={() => deleteTask(task.id)}
                     aria-label="Eliminar tarea"
                   >
-                    <Icon name="trash" size={17} />
+                    <Trash2 size={17} />
                   </button>
                 </div>
               ))}
@@ -457,10 +361,8 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Pomodoro</span>
-
                 <h2>Temporizador</h2>
               </div>
-
               <span className="panel-badge">25 min</span>
             </div>
 
@@ -472,7 +374,6 @@ function Dashboard() {
             >
               <div className="timer-inner">
                 <span>{timeLabel}</span>
-
                 <small>
                   {running ? "Mantén el foco" : "Sesión de trabajo"}
                 </small>
@@ -485,8 +386,7 @@ function Dashboard() {
                 type="button"
                 onClick={() => setRunning(!running)}
               >
-                <Icon name={running ? "pause" : "play"} size={18} />
-
+                {running ? <Pause size={18} /> : <Play size={18} />}
                 {running ? "Pausar" : "Comenzar"}
               </button>
 
@@ -496,7 +396,7 @@ function Dashboard() {
                 onClick={resetTimer}
                 aria-label="Reiniciar temporizador"
               >
-                <Icon name="reset" size={18} />
+                <RotateCcw size={18} />
               </button>
             </div>
           </article>
@@ -505,10 +405,8 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Apuntes rápidos</span>
-
                 <h2>Notas</h2>
               </div>
-
               <span className="autosave">Guardado automático</span>
             </div>
 
@@ -520,7 +418,6 @@ function Dashboard() {
 
             <div className="note-footer">
               <span>{notes.length} caracteres</span>
-
               <span>Se guarda en este dispositivo</span>
             </div>
           </article>
@@ -529,65 +426,45 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Tu progreso</span>
-
                 <h2>Estadísticas</h2>
               </div>
-
               <span className="panel-badge">Hoy</span>
             </div>
 
             <div className="stats-content">
               <div className="stat-card">
                 <span className="stat-label">Sesiones completadas</span>
-
                 <strong>{sessionCount}</strong>
-
                 <small>+1 respecto a ayer</small>
               </div>
 
               <div className="stat-card">
                 <span className="stat-label">Tareas completadas</span>
-
                 <strong>{completed}</strong>
-
                 <small>de {tasks.length} tareas</small>
               </div>
 
               <div className="stat-card">
                 <span className="stat-label">Tiempo concentrado</span>
-
                 <strong>
                   {sessionCount * 25}
                   <em> min</em>
                 </strong>
-
                 <small>Objetivo diario: 100 min</small>
               </div>
 
               <div className="progress-card">
                 <div className="progress-copy">
                   <span>Progreso de tareas</span>
-
                   <strong>{progress}%</strong>
                 </div>
-
                 <div className="progress-track">
-                  <div
-                    style={{
-                      width: `${progress}%`,
-                    }}
-                  />
+                  <div style={{ width: `${progress}%` }} />
                 </div>
-
                 <div className="week-bars" aria-label="Actividad semanal">
                   {[42, 64, 35, 82, 58, 91, 70].map((height, index) => (
                     <div key={index}>
-                      <span
-                        style={{
-                          height: `${height}%`,
-                        }}
-                      />
-
+                      <span style={{ height: `${height}%` }} />
                       <small>
                         {["L", "M", "X", "J", "V", "S", "D"][index]}
                       </small>
@@ -602,10 +479,8 @@ function Dashboard() {
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Espacio visual</span>
-
                 <h2>Pizarra</h2>
               </div>
-
               <button className="clear-board" type="button">
                 Limpiar
               </button>
@@ -619,7 +494,6 @@ function Dashboard() {
               >
                 Idea principal
               </div>
-
               <div
                 className="sticky-note cream"
                 contentEditable
@@ -627,10 +501,8 @@ function Dashboard() {
               >
                 Próximo objetivo
               </div>
-
               <div className="board-placeholder">
-                <Icon name="plus" size={20} />
-
+                <Plus size={20} />
                 <span>Añade y edita tus notas visuales</span>
               </div>
             </div>
