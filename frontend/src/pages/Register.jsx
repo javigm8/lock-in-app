@@ -1,8 +1,9 @@
-import { colors } from '../theme'
+import { useTheme } from '../theme.jsx'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 function Register() {
+  const { colors } = useTheme()
   const navigate = useNavigate()
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')

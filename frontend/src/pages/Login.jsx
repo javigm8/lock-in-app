@@ -1,14 +1,16 @@
-import { colors } from "../theme";
+import { useTheme } from "../theme.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function Login() {
+  const { colors } = useTheme();
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e?.preventDefault();
     setError("");
     try {
       const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -63,7 +65,8 @@ function Login() {
         Lock <span style={{ color: colors.accentMain }}>In!</span>
       </h1>
 
-      <div
+      <form
+        onSubmit={handleLogin}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -116,7 +119,7 @@ function Login() {
         )}
 
         <button
-          onClick={handleLogin}
+          type="submit"
           style={{
             padding: "0.75rem",
             borderRadius: "8px",
@@ -157,7 +160,7 @@ function Login() {
             Crear una cuenta
           </span>
         </p>
-      </div>
+      </form>
     </div>
   );
 }
