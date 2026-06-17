@@ -15,6 +15,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import "./Dashboard.css";
+import Tasks from "../components/Tasks";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -99,6 +100,7 @@ function Dashboard() {
             type="button"
             title="Ajustes"
             aria-label="Ajustes"
+            onClick={() => navigate('/settings')}
           >
             <Settings size={22} />
           </button>
@@ -150,7 +152,9 @@ function Dashboard() {
                 <h2>Tareas</h2>
               </div>
             </div>
-            <p className="empty-state">PENDIENTE</p>
+            <div className="panel-body">
+              <Tasks usuario={usuarioActual} />
+            </div>
           </article>
 
           <article className="panel timer-panel">
