@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import "./Dashboard.css";
 import Tasks from "../components/Tasks";
+import Notes from "../components/Notes";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -208,7 +209,9 @@ function Dashboard() {
                 <h2>Notas</h2>
               </div>
             </div>
-            <p className="empty-state">PENDIENTE</p>
+            <div className="panel-body">
+              <Notes usuario={usuarioActual} />
+            </div>
           </article>
 
           <article className="panel stats-panel">
