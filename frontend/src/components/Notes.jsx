@@ -10,6 +10,7 @@ function Notes({ usuario }) {
   const [contenido, setContenido] = useState("");
   const [expandedId, setExpandedId] = useState(null);
   const [editContenido, setEditContenido] = useState("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const loadNotes = async () => {
     if (!usuario?.id) return;
@@ -87,6 +88,7 @@ function Notes({ usuario }) {
       if (res.status === 204) {
         setNotes((n) => n.filter((x) => x.id !== id));
         if (expandedId === id) setExpandedId(null);
+        setConfirmDeleteId(null);
       } else {
         console.error("delete failed", res.status);
       }
@@ -197,13 +199,33 @@ function Notes({ usuario }) {
               )}
 
               <div className="note-actions">
-                <button
-                  type="button"
-                  onClick={() => handleDelete(n.id)}
-                  title="Eliminar"
-                >
-                  Eliminar
-                </button>
+                {confirmDeleteId === n.id ? (
+                  <>
+                    <span className="confirm-label">¿Seguro?</span>
+                    <button
+                      type="button"
+                      className="confirm-yes"
+                      onClick={() => handleDelete(n.id)}
+                    >
+                      Sí
+                    </button>
+                    <button
+                      type="button"
+                      className="confirm-no"
+                      onClick={() => setConfirmDeleteId(null)}
+                    >
+                      No
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setConfirmDeleteId(n.id)}
+                    title="Eliminar"
+                  >
+                    Eliminar
+                  </button>
+                )}
               </div>
             </li>
           ))}

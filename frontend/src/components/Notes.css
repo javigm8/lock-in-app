@@ -179,9 +179,11 @@
 .note-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
 }
 
-.note-actions button {
+.note-actions button:not(.confirm-yes):not(.confirm-no) {
   border: 0;
   border-radius: 10px;
   padding: 8px 12px;
@@ -192,7 +194,43 @@
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.note-actions button:hover {
+.note-actions button:not(.confirm-yes):not(.confirm-no):hover {
   background: rgba(138, 171, 142, 0.24);
   transform: translateY(-1px);
+}
+
+.confirm-label {
+  font-size: 13px;
+  color: var(--lock-muted);
+  white-space: nowrap;
+}
+
+.confirm-yes {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: rgba(220, 80, 80, 0.2);
+  color: #e07070;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.confirm-yes:hover {
+  background: rgba(220, 80, 80, 0.35);
+}
+
+.confirm-no {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: rgba(138, 171, 142, 0.16);
+  color: var(--lock-text);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.confirm-no:hover {
+  background: rgba(138, 171, 142, 0.24);
 }
