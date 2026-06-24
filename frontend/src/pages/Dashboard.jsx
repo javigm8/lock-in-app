@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
@@ -10,13 +10,11 @@ import {
   Settings,
   LogOut,
   User,
-  Play,
-  Pause,
-  RotateCcw,
 } from "lucide-react";
 import "./Dashboard.css";
 import Tasks from "../components/Tasks";
 import Notes from "../components/Notes";
+import Pomodoro from "../components/Pomodoro";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -26,38 +24,23 @@ function Dashboard() {
     return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
   });
 
-  const [seconds, setSeconds] = useState(25 * 60);
   const [running, setRunning] = useState(false);
+  const [perfiles, setPerfiles] = useState([]);
+  const [perfilActual, setPerfilActual] = useState(null);
 
   useEffect(() => {
-    if (!running) {
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setSeconds((currentSeconds) => {
-        if (currentSeconds <= 1) {
-          clearInterval(timer);
-          setRunning(false);
-          return 25 * 60;
-        }
-        return currentSeconds - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [running]);
-
-  const timeLabel = useMemo(() => {
-    const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
-    const remainingSeconds = String(seconds % 60).padStart(2, "0");
-    return `${minutes}:${remainingSeconds}`;
-  }, [seconds]);
-
-  const resetTimer = () => {
-    setRunning(false);
-    setSeconds(25 * 60);
-  };
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    fetch("http://localhost:8080/api/perfiles-sesion/predefinidos", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        setPerfiles(data);
+        if (data.length > 0) setPerfilActual(data[0]);
+      })
+      .catch(console.error);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -129,9 +112,7 @@ function Dashboard() {
 
           <div className="topbar-center">
             <span className={`focus-dot ${running ? "running" : ""}`} />
-            <strong>
-              {running ? "Sesión en curso" : "Listo para concentrarte"}
-            </strong>
+            <strong>{running ? "Sesión en curso" : "Listo para concentrarte"}</strong>
           </div>
 
           <button className="profile-button" type="button">
@@ -164,41 +145,27 @@ function Dashboard() {
                 <span className="panel-kicker">Pomodoro</span>
                 <h2>Temporizador</h2>
               </div>
-              <span className="panel-badge">25 min</span>
+              {perfiles.length > 0 && (
+                <select
+                  className="perfil-select"
+                  value={perfilActual?.id ?? ""}
+                  onChange={(e) => {
+                    const p = perfiles.find((x) => x.id === parseInt(e.target.value));
+                    if (p) setPerfilActual(p);
+                  }}
+                  disabled={running}
+                  aria-label="Seleccionar perfil de sesión"
+                >
+                  {perfiles.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.nombre} ({p.duracion} min · {p.ciclos} ciclo{p.ciclos !== 1 ? "s" : ""})
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
-
-            <div
-              className="timer-ring"
-              style={{
-                "--timer-progress": `${(seconds / (25 * 60)) * 360}deg`,
-              }}
-            >
-              <div className="timer-inner">
-                <span>{timeLabel}</span>
-                <small>
-                  {running ? "Mantén el foco" : "Sesión de trabajo"}
-                </small>
-              </div>
-            </div>
-
-            <div className="timer-controls">
-              <button
-                className="primary-control"
-                type="button"
-                onClick={() => setRunning(!running)}
-              >
-                {running ? <Pause size={18} /> : <Play size={18} />}
-                {running ? "Pausar" : "Comenzar"}
-              </button>
-
-              <button
-                className="secondary-control"
-                type="button"
-                onClick={resetTimer}
-                aria-label="Reiniciar temporizador"
-              >
-                <RotateCcw size={18} />
-              </button>
+            <div className="panel-body">
+              <Pomodoro usuario={usuarioActual} running={running} setRunning={setRunning} perfilActual={perfilActual} />
             </div>
           </article>
 

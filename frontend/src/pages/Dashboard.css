@@ -488,3 +488,29 @@ button {
     padding: 15px;
   }
 }
+/* Selector de perfil en el panel-heading del Pomodoro */
+.perfil-select {
+  border: 1px solid var(--lock-border);
+  border-radius: 10px;
+  background: var(--lock-bg);
+  color: var(--lock-text);
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.perfil-select:focus {
+  border-color: var(--lock-accent);
+  box-shadow: 0 0 0 3px rgba(138, 171, 142, 0.1);
+}
+
+.perfil-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
