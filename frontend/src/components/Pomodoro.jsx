@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
-import "./Pomodoro.css";
+import "../styles/Pomodoro.css";
 
 const API_BASE = "http://localhost:8080";
 

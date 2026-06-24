@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Notes.css";
+import "../styles/Notes.css";
 
 const API_BASE = "http://localhost:8080";
 

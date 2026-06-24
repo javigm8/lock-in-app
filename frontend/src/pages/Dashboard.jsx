@@ -11,7 +11,7 @@ import {
   LogOut,
   User,
 } from "lucide-react";
-import "./Dashboard.css";
+import "../styles/Dashboard.css";
 import Tasks from "../components/Tasks";
 import Notes from "../components/Notes";
 import Pomodoro from "../components/Pomodoro";

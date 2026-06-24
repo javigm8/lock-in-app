@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./Tasks.css";
+import "../styles/Tasks.css";
 
 const API_BASE = "http://localhost:8080";
 
