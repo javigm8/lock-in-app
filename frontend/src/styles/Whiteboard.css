@@ -1,0 +1,201 @@
+.whiteboard-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--lock-bg);
+  color: var(--lock-text);
+}
+
+/* Topbar */
+.whiteboard-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--lock-surface);
+  border-bottom: 1px solid var(--lock-border);
+  flex-shrink: 0;
+}
+
+.wb-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--lock-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.wb-back-btn:hover {
+  color: var(--lock-text);
+  background: var(--lock-surface-soft);
+}
+
+.wb-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.wb-title span {
+  color: var(--lock-accent);
+}
+
+.wb-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.wb-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--lock-border);
+  color: var(--lock-muted);
+  cursor: pointer;
+  padding: 7px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.wb-icon-btn:hover {
+  color: var(--lock-text);
+  background: var(--lock-surface-soft);
+  border-color: var(--lock-accent);
+}
+
+.wb-icon-btn.danger:hover {
+  color: #E57373;
+  border-color: #E57373;
+}
+
+/* Body */
+.whiteboard-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Toolbar lateral */
+.wb-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 10px;
+  background: var(--lock-surface);
+  border-right: 1px solid var(--lock-border);
+  width: 62px;
+  flex-shrink: 0;
+}
+
+.wb-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.wb-divider {
+  width: 36px;
+  height: 1px;
+  background: var(--lock-border);
+}
+
+.wb-tool-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid transparent;
+  color: var(--lock-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  transition: all 0.15s;
+}
+
+.wb-tool-btn:hover {
+  color: var(--lock-text);
+  background: var(--lock-surface-soft);
+}
+
+.wb-tool-btn.active {
+  color: var(--lock-accent);
+  background: var(--lock-accent-tint);
+  border-color: var(--lock-accent);
+}
+
+[data-theme="dark"] .wb-tool-btn.active {
+  background: rgba(127, 175, 130, 0.15);
+}
+
+/* Colores */
+.wb-colors {
+  gap: 6px;
+}
+
+.wb-color-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  outline: none;
+}
+
+.wb-color-btn:hover {
+  transform: scale(1.15);
+}
+
+.wb-color-btn.active {
+  border-color: var(--lock-accent);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px var(--lock-bg);
+}
+
+/* Grosores */
+.wb-sizes {
+  gap: 8px;
+}
+
+.wb-size-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.wb-size-btn:hover {
+  background: var(--lock-surface-soft);
+}
+
+.wb-size-btn.active {
+  border-color: var(--lock-accent);
+  background: rgba(127, 175, 130, 0.1);
+}
+
+.wb-size-btn span {
+  display: block;
+  border-radius: 50%;
+  background: var(--lock-text);
+}
+
+/* Canvas */
+.wb-canvas {
+  flex: 1;
+  display: block;
+}

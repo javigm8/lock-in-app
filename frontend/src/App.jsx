@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
+import Whiteboard from './pages/Whiteboard'
 
 function App() {
   return (
@@ -25,6 +26,11 @@ function App() {
       <Route
         path="/settings"
         element={<Settings />}
+      />
+
+      <Route
+        path="/pizarra"
+        element={<Whiteboard />}
       />
 
       <Route
