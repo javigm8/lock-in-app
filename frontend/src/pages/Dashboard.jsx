@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Home,
@@ -19,6 +19,7 @@ import Tasks from "../components/Tasks";
 import Notes from "../components/Notes";
 import Pomodoro from "../components/Pomodoro";
 import Statistics from "../components/Statistics";
+import AmbientPlayer from "../components/AmbientPlayer";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -29,12 +30,15 @@ function Dashboard() {
   });
 
   const [running, setRunning] = useState(false);
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const menuRef = useRef(null);
   const [perfiles, setPerfiles] = useState([]);
   const [perfilActual, setPerfilActual] = useState(null);
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [nuevaDuracion, setNuevaDuracion] = useState(25);
   const [nuevosCiclos, setNuevosCiclos] = useState(4);
+  const [pizarraPreview, setPizarraPreview] = useState(null);
 
   const cargarPerfiles = () => {
     const token = localStorage.getItem("token");
@@ -43,9 +47,12 @@ function Dashboard() {
       fetch("http://localhost:8080/api/perfiles-sesion/predefinidos", {
         headers: { Authorization: `Bearer ${token}` },
       }).then((r) => r.json()),
-      fetch(`http://localhost:8080/api/perfiles-sesion/usuario/${usuarioActual?.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      }).then((r) => r.json()),
+      fetch(
+        `http://localhost:8080/api/perfiles-sesion/usuario/${usuarioActual?.id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      ).then((r) => r.json()),
     ])
       .then(([predefinidos, custom]) => {
         const todos = [...predefinidos, ...custom.filter((p) => p.esCustom)];
@@ -54,17 +61,45 @@ function Dashboard() {
       })
       .catch(console.error);
   };
- 
+
   useEffect(() => {
     cargarPerfiles();
   }, []);
- 
+
+  useEffect(() => {
+    const handleClickFuera = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuAbierto(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickFuera);
+    return () => document.removeEventListener("mousedown", handleClickFuera);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token || !usuarioActual) return;
+    fetch(`http://localhost:8080/api/pizarras/usuario/${usuarioActual.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.length > 0 && data[0].datos) {
+          setPizarraPreview(data[0].datos);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
   const crearPerfilCustom = () => {
     if (!nuevoNombre.trim()) return;
     const token = localStorage.getItem("token");
     fetch("http://localhost:8080/api/perfiles-sesion", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         nombre: nuevoNombre,
         duracion: parseInt(nuevaDuracion),
@@ -84,7 +119,7 @@ function Dashboard() {
       })
       .catch(console.error);
   };
- 
+
   const eliminarPerfil = (perfil) => {
     const token = localStorage.getItem("token");
     fetch(`http://localhost:8080/api/perfiles-sesion/${perfil.id}`, {
@@ -133,24 +168,15 @@ function Dashboard() {
         </nav>
 
         <div className="sidebar-bottom">
+          <AmbientPlayer />
           <button
             className="nav-button"
             type="button"
             title="Ajustes"
             aria-label="Ajustes"
-            onClick={() => navigate('/settings')}
+            onClick={() => navigate("/settings")}
           >
             <Settings size={22} />
-          </button>
-
-          <button
-            className="nav-button logout-button"
-            type="button"
-            title="Cerrar sesión"
-            aria-label="Cerrar sesión"
-            onClick={logout}
-          >
-            <LogOut size={22} />
           </button>
         </div>
       </aside>
@@ -158,7 +184,6 @@ function Dashboard() {
       <main className="dashboard-main">
         <header className="topbar">
           <div>
-            <p className="eyebrow">Panel principal</p>
             <h1>
               Lock <span>In!</span>
             </h1>
@@ -166,17 +191,33 @@ function Dashboard() {
 
           <div className="topbar-center">
             <span className={`focus-dot ${running ? "running" : ""}`} />
-            <strong>{running ? "Sesión en curso" : "Listo para concentrarte"}</strong>
+            <strong>
+              {running ? "Sesión en curso" : "Listo para concentrarte"}
+            </strong>
           </div>
 
-          <button className="profile-button" type="button">
-            <div className="profile-copy">
-              <strong>¡Hola, {usuarioActual?.nombre || "Usuario"}!</strong>
-            </div>
-            <span className="avatar">
-              <User size={20} />
-            </span>
-          </button>
+          <div className="profile-wrapper" ref={menuRef}>
+            <button
+              className="profile-button"
+              type="button"
+              onClick={() => setMenuAbierto((v) => !v)}
+            >
+              <div className="profile-copy">
+                <strong>¡Hola, {usuarioActual?.nombre || "Usuario"}!</strong>
+              </div>
+              <span className="avatar">
+                <User size={20} />
+              </span>
+            </button>
+
+            {menuAbierto && (
+              <div className="profile-menu">
+                <button className="profile-menu-item logout" onClick={logout}>
+                  <LogOut size={16} /> Cerrar sesión
+                </button>
+              </div>
+            )}
+          </div>
         </header>
 
         <section className="dashboard-grid">
@@ -204,7 +245,9 @@ function Dashboard() {
                     className="perfil-select"
                     value={perfilActual?.id ?? ""}
                     onChange={(e) => {
-                      const p = perfiles.find((x) => x.id === parseInt(e.target.value));
+                      const p = perfiles.find(
+                        (x) => x.id === parseInt(e.target.value),
+                      );
                       if (p) setPerfilActual(p);
                     }}
                     disabled={running}
@@ -212,7 +255,8 @@ function Dashboard() {
                   >
                     {perfiles.map((p) => (
                       <option key={p.id} value={p.id}>
-                        {p.nombre} ({p.duracion} min · {p.ciclos} ciclo{p.ciclos !== 1 ? "s" : ""})
+                        {p.nombre} ({p.duracion} min · {p.ciclos} ciclo
+                        {p.ciclos !== 1 ? "s" : ""})
                       </option>
                     ))}
                   </select>
@@ -244,7 +288,8 @@ function Dashboard() {
                     value={nuevoNombre}
                     onChange={(e) => setNuevoNombre(e.target.value)}
                   />
-                  <label>Duración (min)
+                  <label>
+                    Duración (min)
                     <input
                       className="perfil-form-input"
                       type="number"
@@ -254,7 +299,8 @@ function Dashboard() {
                       onChange={(e) => setNuevaDuracion(e.target.value)}
                     />
                   </label>
-                  <label>Ciclos
+                  <label>
+                    Ciclos
                     <input
                       className="perfil-form-input"
                       type="number"
@@ -264,12 +310,22 @@ function Dashboard() {
                       onChange={(e) => setNuevosCiclos(e.target.value)}
                     />
                   </label>
-                  <button className="perfil-form-save" onClick={crearPerfilCustom}>Guardar</button>
+                  <button
+                    className="perfil-form-save"
+                    onClick={crearPerfilCustom}
+                  >
+                    Guardar
+                  </button>
                 </div>
               )}
             </div>
             <div className="panel-body">
-              <Pomodoro usuario={usuarioActual} running={running} setRunning={setRunning} perfilActual={perfilActual} />
+              <Pomodoro
+                usuario={usuarioActual}
+                running={running}
+                setRunning={setRunning}
+                perfilActual={perfilActual}
+              />
             </div>
           </article>
 
@@ -297,14 +353,28 @@ function Dashboard() {
             </div>
           </article>
 
-          <article className="panel board-panel" onClick={() => navigate('/pizarra')} style={{ cursor: 'pointer' }}>
+          <article
+            className="panel board-panel"
+            onClick={() => navigate("/pizarra")}
+            style={{ cursor: "pointer" }}
+          >
             <div className="panel-heading">
               <div>
                 <span className="panel-kicker">Espacio visual</span>
                 <h2>Pizarra</h2>
               </div>
             </div>
-            <p className="empty-state">Abrir pizarra</p>
+            <div className="panel-body board-preview">
+              {pizarraPreview ? (
+                <img
+                  src={pizarraPreview}
+                  alt="Previsualización pizarra"
+                  className="board-thumbnail"
+                />
+              ) : (
+                <p className="empty-state">Abrir pizarra</p>
+              )}
+            </div>
           </article>
         </section>
       </main>
