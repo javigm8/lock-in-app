@@ -9,16 +9,21 @@ const BASE = window.location.protocol === "file:"
 const SONIDOS = [
   { id: "lluvia",    nombre: "Lluvia",       icono: "🌧️", archivo: `${BASE}/lluvia.mp3` },
   { id: "olas",      nombre: "Olas del mar", icono: "🌊", archivo: `${BASE}/olas.mp3` },
-  { id: "bosque",    nombre: "Bosque",       icono: "🌲", archivo: `${BASE}/bosque.mp3` },
+  { id: "bosque",    nombre: "Bosque",       icono: "🌳", archivo: `${BASE}/bosque.mp3` },
   { id: "blanco",    nombre: "Ruido blanco", icono: "📻", archivo: `${BASE}/blanco.mp3` },
 ];
 
 function AmbientPlayer() {
+  // Controla si el panel flotante está visible.
   const [abierto, setAbierto] = useState(false);
-  const [sonidoActivo, setSonidoActivo] = useState(null); // id del sonido activo
+  // Guarda el id del sonido que se está reproduciendo actualmente.
+  const [sonidoActivo, setSonidoActivo] = useState(null);
+  // Volumen global aplicado al audio actual y a los siguientes audios.
   const [volumen, setVolumen] = useState(0.5);
 
+  // Referencia al objeto Audio en reproducción.
   const audioRef = useRef(null);
+  // Referencia al contenedor para detectar clics fuera del popup.
   const popupRef = useRef(null);
 
   // Cerrar popup al hacer click fuera
@@ -40,7 +45,7 @@ function AmbientPlayer() {
   }, [volumen]);
 
   const handleSonido = (sonido) => {
-    // Si es el mismo sonido activo → parar
+    // Si se pulsa el mismo sonido que ya está activo, actúa como toggle (detener).
     if (sonidoActivo === sonido.id) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -49,13 +54,13 @@ function AmbientPlayer() {
       return;
     }
 
-    // Si había otro sonido → pararlo primero
+    // Si había otro sonido sonando, lo detenemos antes de cambiar.
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
 
-    // Reproducir el nuevo
+    // Crea una nueva instancia de audio y la reproduce en bucle.
     const audio = new Audio(sonido.archivo);
     audio.loop = true;
     audio.volume = volumen;
@@ -65,6 +70,7 @@ function AmbientPlayer() {
   };
 
   const handleStop = () => {
+    // Botón de parada total: limpia reproducción y estado visual.
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -77,6 +83,7 @@ function AmbientPlayer() {
 
   return (
     <div className="ambient-wrapper" ref={popupRef}>
+      {/* Botón principal del reproductor en la barra de navegación. */}
       <button
         type="button"
         className={`nav-button ambient-btn ${reproduciendo ? "ambient-active" : ""}`}
@@ -92,6 +99,7 @@ function AmbientPlayer() {
         <div className="ambient-popup">
           <p className="ambient-title">Ambiente sonoro</p>
 
+          {/* Lista de sonidos disponibles con indicador del activo. */}
           <ul className="ambient-list">
             {SONIDOS.map((s) => (
               <li key={s.id}>
@@ -110,6 +118,7 @@ function AmbientPlayer() {
             ))}
           </ul>
 
+          {/* Control de volumen en tiempo real (0 a 1). */}
           <div className="ambient-volumen">
             <span>🔈</span>
             <input
@@ -124,6 +133,7 @@ function AmbientPlayer() {
             <span>🔊</span>
           </div>
 
+          {/* Solo se muestra cuando hay un sonido en reproducción. */}
           {reproduciendo && (
             <button
               type="button"
