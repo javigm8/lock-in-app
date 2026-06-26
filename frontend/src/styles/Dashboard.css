@@ -223,7 +223,7 @@ button {
   padding-top: 24px;
   display: grid;
   grid-template-columns: 1.1fr 1.1fr 0.95fr;
-  grid-template-rows: minmax(310px, auto) minmax(320px, auto);
+  grid-template-rows: minmax(310px, auto) minmax(340px, auto);
   gap: 18px;
 }
 
@@ -513,4 +513,90 @@ button {
 .perfil-select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+/* Perfil custom */
+.perfil-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.perfil-add-btn,
+.perfil-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--lock-border);
+  color: var(--lock-muted);
+  border-radius: 6px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.perfil-add-btn:hover {
+  color: var(--lock-accent);
+  border-color: var(--lock-accent);
+}
+
+.perfil-delete-btn:hover {
+  color: #E57373;
+  border-color: #E57373;
+}
+
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--lock-surface-soft);
+  border: 1px solid var(--lock-border);
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.perfil-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: var(--lock-muted);
+}
+
+.perfil-form-input {
+  background: var(--lock-surface);
+  border: 1px solid var(--lock-border);
+  border-radius: 6px;
+  color: var(--lock-text);
+  padding: 5px 8px;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.perfil-form-input:focus {
+  outline: none;
+  border-color: var(--lock-accent);
+}
+
+.perfil-form-save {
+  background: var(--lock-accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.15s;
+  align-self: flex-end;
+}
+
+.perfil-form-save:hover {
+  background: var(--lock-accent-pressed);
+}
+
+.stats-panel .panel-body {
+  min-height: 200px;
 }
