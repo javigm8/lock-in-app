@@ -2,31 +2,28 @@ import { useEffect, useRef, useState } from "react";
 import { Music, Music2 } from "lucide-react";
 import "../styles/AmbientPlayer.css";
 
-const BASE = window.location.protocol === "file:" 
-  ? "./sounds"           // Electron (carga desde disco)
-  : `${window.location.origin}/sounds`; // Navegador (Vite dev server)
+const BASE = window.location.protocol === "file:"
+  ? "./sounds"
+  : `${window.location.origin}/sounds`;
 
 const SONIDOS = [
-  { id: "lluvia",    nombre: "Lluvia",       icono: "🌧️", archivo: `${BASE}/lluvia.mp3` },
-  { id: "olas",      nombre: "Olas del mar", icono: "🌊", archivo: `${BASE}/olas.mp3` },
-  { id: "bosque",    nombre: "Bosque",       icono: "🌳", archivo: `${BASE}/bosque.mp3` },
-  { id: "blanco",    nombre: "Ruido blanco", icono: "📻", archivo: `${BASE}/blanco.mp3` },
+  { id: "lluvia", nombre: "Lluvia", icono: "🌧️", archivo: `${BASE}/lluvia.mp3` },
+  { id: "olas", nombre: "Olas del mar", icono: "🌊", archivo: `${BASE}/olas.mp3` },
+  { id: "bosque", nombre: "Bosque", icono: "🌳", archivo: `${BASE}/bosque.mp3` },
+  { id: "blanco", nombre: "Ruido blanco", icono: "⚪", archivo: `${BASE}/blanco.mp3` },
 ];
 
 function AmbientPlayer() {
-  // Controla si el panel flotante está visible.
+  // Estado local del reproductor.
   const [abierto, setAbierto] = useState(false);
-  // Guarda el id del sonido que se está reproduciendo actualmente.
   const [sonidoActivo, setSonidoActivo] = useState(null);
-  // Volumen global aplicado al audio actual y a los siguientes audios.
   const [volumen, setVolumen] = useState(0.5);
 
-  // Referencia al objeto Audio en reproducción.
+  // Referencias para el audio y el popup.
   const audioRef = useRef(null);
-  // Referencia al contenedor para detectar clics fuera del popup.
   const popupRef = useRef(null);
 
-  // Cerrar popup al hacer click fuera
+  // Cierra el popup al hacer clic fuera.
   useEffect(() => {
     const handleClickFuera = (e) => {
       if (popupRef.current && !popupRef.current.contains(e.target)) {
@@ -37,15 +34,15 @@ function AmbientPlayer() {
     return () => document.removeEventListener("mousedown", handleClickFuera);
   }, [abierto]);
 
-  // Cambiar volumen en tiempo real
+  // Sincroniza el volumen con el audio activo.
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volumen;
     }
   }, [volumen]);
 
+  // Alterna o cambia el sonido ambiental.
   const handleSonido = (sonido) => {
-    // Si se pulsa el mismo sonido que ya está activo, actúa como toggle (detener).
     if (sonidoActivo === sonido.id) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -54,13 +51,11 @@ function AmbientPlayer() {
       return;
     }
 
-    // Si había otro sonido sonando, lo detenemos antes de cambiar.
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
 
-    // Crea una nueva instancia de audio y la reproduce en bucle.
     const audio = new Audio(sonido.archivo);
     audio.loop = true;
     audio.volume = volumen;
@@ -69,8 +64,8 @@ function AmbientPlayer() {
     setSonidoActivo(sonido.id);
   };
 
+  // Detiene la reproducción actual.
   const handleStop = () => {
-    // Botón de parada total: limpia reproducción y estado visual.
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -83,12 +78,11 @@ function AmbientPlayer() {
 
   return (
     <div className="ambient-wrapper" ref={popupRef}>
-      {/* Botón principal del reproductor en la barra de navegación. */}
       <button
         type="button"
         className={`nav-button ambient-btn ${reproduciendo ? "ambient-active" : ""}`}
-        title="Ambiente sonoro"
-        aria-label="Ambiente sonoro"
+        title="Sonido ambiental"
+        aria-label="Sonido ambiental"
         onClick={() => setAbierto((a) => !a)}
       >
         {reproduciendo ? <Music2 size={22} /> : <Music size={22} />}
@@ -97,9 +91,7 @@ function AmbientPlayer() {
 
       {abierto && (
         <div className="ambient-popup">
-          <p className="ambient-title">Ambiente sonoro</p>
-
-          {/* Lista de sonidos disponibles con indicador del activo. */}
+          <p className="ambient-title">Sonido ambiental</p>
           <ul className="ambient-list">
             {SONIDOS.map((s) => (
               <li key={s.id}>
@@ -109,7 +101,7 @@ function AmbientPlayer() {
                   onClick={() => handleSonido(s)}
                 >
                   <span className="ambient-emoji">{s.icono}</span>
-                  <span className="ambient-nombre">{s.nombre}</span>
+                  <span className="ambient-nombre">{ s.nombre }</span>
                   {sonidoActivo === s.id && (
                     <span className="ambient-playing">▶ sonando</span>
                   )}
@@ -118,7 +110,6 @@ function AmbientPlayer() {
             ))}
           </ul>
 
-          {/* Control de volumen en tiempo real (0 a 1). */}
           <div className="ambient-volumen">
             <span>🔈</span>
             <input
@@ -133,7 +124,6 @@ function AmbientPlayer() {
             <span>🔊</span>
           </div>
 
-          {/* Solo se muestra cuando hay un sonido en reproducción. */}
           {reproduciendo && (
             <button
               type="button"
