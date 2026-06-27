@@ -85,7 +85,12 @@ function Dashboard() {
       .then((r) => r.json())
       .then((data) => {
         if (data.length > 0 && data[0].datos) {
-          setPizarraPreview(data[0].datos);
+          try {
+            const parsed = JSON.parse(data[0].datos);
+            if (parsed?.imagen) setPizarraPreview(parsed.imagen);
+          } catch (e) {
+            console.error("Error parseando datos de pizarra", e);
+          }
         }
       })
       .catch(console.error);
