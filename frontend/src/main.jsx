@@ -4,13 +4,16 @@ import { HashRouter } from 'react-router-dom'
 import './styles/index.css'
 import App from './App.jsx'
 import { ThemeProvider } from './theme.jsx'
+import { TimerProvider } from './TimerContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <HashRouter>
-        <App />
-      </HashRouter>
+      <TimerProvider>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </TimerProvider>
     </ThemeProvider>
   </StrictMode>,
 )
