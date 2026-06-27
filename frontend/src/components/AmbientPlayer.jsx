@@ -103,7 +103,7 @@ function AmbientPlayer() {
                   <span className="ambient-emoji">{s.icono}</span>
                   <span className="ambient-nombre">{ s.nombre }</span>
                   {sonidoActivo === s.id && (
-                    <span className="ambient-playing">▶ sonando</span>
+                    <span className="ambient-playing">▶</span>
                   )}
                 </button>
               </li>
