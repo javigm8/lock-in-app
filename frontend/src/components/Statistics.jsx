@@ -133,6 +133,7 @@ function Statistics({ usuario }) {
     },
     title: { text: null },
     credits: { enabled: false },
+    accessibility: { enabled: false }
   };
 
   // Genera los datos para el gráfico de pastel, excluyendo días sin sesiones.
