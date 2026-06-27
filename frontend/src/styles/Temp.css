@@ -1,4 +1,4 @@
-.pomodoro-root {
+.temp-root {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,7 +8,7 @@
 }
 
 /* Anillo de progreso */
-.pomodoro-display {
+.temp-display {
   position: relative;
   display: flex;
   align-items: center;
@@ -47,7 +47,7 @@
   transition: stroke-dashoffset 1s linear;
 }
 
-.pomodoro-time {
+.temp-time {
   font-size: 32px;
   font-weight: 600;
   color: var(--lock-text);
@@ -70,7 +70,7 @@
 }
 
 /* Controles */
-.pomodoro-controls {
+.temp-controls {
   display: flex;
   gap: 12px;
 }

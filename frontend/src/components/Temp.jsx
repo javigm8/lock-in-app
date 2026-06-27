@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
-import "../styles/Pomodoro.css";
+import "../styles/Temp.css";
 
 const API_BASE = "http://localhost:8080";
 
-function Pomodoro({ usuario, running, setRunning, perfilActual }) {
+function Temp({ usuario, running, setRunning, perfilActual }) {
   const [seconds, setSeconds] = useState(perfilActual ? perfilActual.duracion * 60 : 25 * 60);
   const [cicloActual, setCicloActual] = useState(1);
   const [sesionCompleta, setSesionCompleta] = useState(false);
@@ -106,8 +106,8 @@ function Pomodoro({ usuario, running, setRunning, perfilActual }) {
     : 0;
 
   return (
-    <div className="pomodoro-root">
-      <div className="pomodoro-display">
+    <div className="temp-root">
+      <div className="temp-display">
         <div className="progress-ring-wrapper">
           <svg viewBox="0 0 120 120" className="progress-ring">
             <circle cx="60" cy="60" r="52" className="ring-bg" />
@@ -120,7 +120,7 @@ function Pomodoro({ usuario, running, setRunning, perfilActual }) {
               strokeDashoffset={`${2 * Math.PI * 52 * (1 - progress)}`}
             />
           </svg>
-          <span className="pomodoro-time">{timeLabel}</span>
+          <span className="temp-time">{timeLabel}</span>
         </div>
       </div>
 
@@ -132,7 +132,7 @@ function Pomodoro({ usuario, running, setRunning, perfilActual }) {
         </p>
       )}
 
-      <div className="pomodoro-controls">
+      <div className="temp-controls">
         <button
           type="button"
           className="ctrl-btn"
@@ -155,4 +155,4 @@ function Pomodoro({ usuario, running, setRunning, perfilActual }) {
   );
 }
 
-export default Pomodoro;
+export default Temp;
