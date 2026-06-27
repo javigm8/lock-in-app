@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Music, Music2 } from "lucide-react";
+import { Music, Music2, CloudRain, Waves, TreePine, Wind, Volume1, Volume2 } from "lucide-react";
 import "../styles/AmbientPlayer.css";
 
 const BASE = window.location.protocol === "file:"
@@ -7,10 +7,10 @@ const BASE = window.location.protocol === "file:"
   : `${window.location.origin}/sounds`;
 
 const SONIDOS = [
-  { id: "lluvia", nombre: "Lluvia", icono: "🌧️", archivo: `${BASE}/lluvia.mp3` },
-  { id: "olas", nombre: "Olas del mar", icono: "🌊", archivo: `${BASE}/olas.mp3` },
-  { id: "bosque", nombre: "Bosque", icono: "🌳", archivo: `${BASE}/bosque.mp3` },
-  { id: "blanco", nombre: "Ruido blanco", icono: "⚪", archivo: `${BASE}/blanco.mp3` },
+  { id: "lluvia", nombre: "Lluvia", icono: <CloudRain size={16} />, archivo: `${BASE}/lluvia.mp3` },
+  { id: "olas", nombre: "Olas del mar", icono: <Waves size={16} />, archivo: `${BASE}/olas.mp3` },
+  { id: "bosque", nombre: "Bosque", icono: <TreePine size={16} />, archivo: `${BASE}/bosque.mp3` },
+  { id: "blanco", nombre: "Ruido blanco", icono: <Wind size={16} />, archivo: `${BASE}/blanco.mp3` },
 ];
 
 function AmbientPlayer() {
@@ -111,7 +111,7 @@ function AmbientPlayer() {
           </ul>
 
           <div className="ambient-volumen">
-            <span>🔈</span>
+            <Volume1 size={16} />
             <input
               type="range"
               min="0"
@@ -121,7 +121,7 @@ function AmbientPlayer() {
               onChange={(e) => setVolumen(parseFloat(e.target.value))}
               aria-label="Volumen"
             />
-            <span>🔊</span>
+            <Volume2 size={16} />
           </div>
 
           {reproduciendo && (
