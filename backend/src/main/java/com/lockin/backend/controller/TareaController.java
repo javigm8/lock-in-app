@@ -1,13 +1,21 @@
 package com.lockin.backend.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lockin.backend.dto.TareaDTO;
 import com.lockin.backend.model.Tarea;
 import com.lockin.backend.service.TareaService;
 import com.lockin.backend.service.UsuarioService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/tareas")
@@ -43,6 +51,17 @@ public class TareaController {
     @PostMapping
     public TareaDTO save(@RequestBody Tarea tarea) {
         return new TareaDTO(tareaService.save(tarea));
+    }
+
+
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<TareaDTO> updateEstado(@PathVariable Integer id, @RequestBody java.util.Map<String, String> body) {
+        return tareaService.findById(id)
+                .map(tarea -> {
+                    tarea.setEstado(body.get("estado"));
+                    return ResponseEntity.ok(new TareaDTO(tareaService.save(tarea)));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
