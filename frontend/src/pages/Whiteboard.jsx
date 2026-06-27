@@ -23,6 +23,7 @@ function Whiteboard() {
   const isDrawing = useRef(false);
   const lastPoint = useRef(null);
   const pizarraId = useRef(null);
+  const cargado = useRef(false);
 
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState(COLORS[0]);
@@ -54,9 +55,16 @@ function Whiteboard() {
           const datosParseados = pizarra.datos ? JSON.parse(pizarra.datos) : null;
           if (datosParseados?.imagen) {
             const img = new Image();
-            img.onload = () => context.drawImage(img, 0, 0);
+            img.onload = () => {
+              context.drawImage(img, 0, 0);
+              cargado.current = true;
+            };
             img.src = datosParseados.imagen;
+          } else {
+            cargado.current = true;
           }
+        } else {
+          cargado.current = true; // primera vez, canvas vacío listo para guardar
         }
       })
       .catch(console.error);
@@ -64,10 +72,10 @@ function Whiteboard() {
 
   // Guarda la pizarra actual en el backend y regresa al dashboard.
   const handleBack = async () => {
-    const c = canvasRef.current;
-    if (!c) return;
+    const canvas = canvasRef.current;
+    if (!canvas || !cargado.current) return;
 
-    const imagen = c.toDataURL("image/png");
+    const imagen = canvas.toDataURL("image/png");
     const body = {
       ...(pizarraId.current ? { id: pizarraId.current } : {}),
       usuario: { id: usuario.id },
