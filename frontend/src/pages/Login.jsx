@@ -1,7 +1,7 @@
 import { useTheme } from "../theme.jsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { Sun, Moon } from 'lucide-react'
+import { useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
 function Login() {
   const { colors, theme, toggleTheme } = useTheme();
@@ -9,7 +9,6 @@ function Login() {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const canvasRef = useRef(null);
 
   const handleLogin = async (e) => {
     e?.preventDefault();
@@ -37,6 +36,7 @@ function Login() {
           nombre: data.nombre,
           usuario: data.usuario,
           email: data.email,
+          configuracion: data.configuracion,
         }),
       );
 
@@ -45,56 +45,6 @@ function Login() {
       setError("No se pudo conectar con el servidor", e);
     }
   };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const COUNT = 150;
-    const particles = Array.from({ length: COUNT }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 2.5 + 0.6,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      alpha: Math.random() * 0.4 + 0.1,
-    }));
-
-    let animId;
-
-    const draw = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (const p of particles) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(127,175,130,${p.alpha})`;
-      ctx.fill();
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
-    }
-
-    animId = requestAnimationFrame(draw);
-  };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
 
   return (
     <div
@@ -109,11 +59,6 @@ function Login() {
         overflow: "hidden",
       }}
     >
-      <canvas
-        ref={canvasRef}
-        style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-      />
-
       <button
         onClick={toggleTheme}
         style={{
@@ -123,11 +68,11 @@ function Login() {
           background: "transparent",
           border: "none",
           cursor: "pointer",
-          color: theme === 'dark' ? colors.textMuted : '#1C1E1A',
+          color: theme === "dark" ? colors.textMuted : "#1C1E1A",
           zIndex: 10,
         }}
       >
-        {theme === 'dark' ? <Sun /> : <Moon />}
+        {theme === "dark" ? <Sun /> : <Moon />}
       </button>
 
       <h1
