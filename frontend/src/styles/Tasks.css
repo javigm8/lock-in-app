@@ -53,7 +53,7 @@
 
 .task-item {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 10px;
   padding: 12px;
@@ -104,4 +104,40 @@
 .task-actions button:hover {
   background: rgba(138, 171, 142, 0.24);
   transform: translateY(-1px);
+}
+
+[data-theme="light"] .task-item {
+  border-color: var(--lock-border);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.task-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--lock-border);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.task-check.checked {
+  background: var(--lock-accent);
+  border-color: var(--lock-accent);
+}
+
+.task-check.checked::after {
+  content: "✓";
+  display: block;
+  color: #172018;
+  font-size: 12px;
+  text-align: center;
+  line-height: 16px;
+}
+
+.task-title-done {
+  text-decoration: line-through;
+  opacity: 0.5;
 }

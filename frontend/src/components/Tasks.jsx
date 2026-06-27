@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Trash } from "lucide-react";
 import "../styles/Tasks.css";
 
 const API_BASE = "http://localhost:8080";
@@ -77,6 +78,23 @@ function Tasks({ usuario }) {
     }
   };
 
+  const handleToggle = async (task) => {
+    const nuevoEstado = task.estado === "COMPLETADA" ? "PENDIENTE" : "COMPLETADA";
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`${API_BASE}/api/tareas/${task.id}/estado`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ estado: nuevoEstado }),
+      });
+      if (res.ok) {
+        setTasks((prev) =>
+          prev.map((t) => t.id === task.id ? { ...t, estado: nuevoEstado } : t)
+        );
+      }
+    } catch (err) { console.error(err); }
+  };
+
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -113,14 +131,19 @@ function Tasks({ usuario }) {
       ) : (
         <ul className="task-list">
           {tasks.map((t) => (
-            <li key={t.id} className="task-item">
+            <li key={t.id} className={`task-item${t.estado === "COMPLETADA" ? " task-done" : ""}`}>
+              <button
+                type="button"
+                className={`task-check${t.estado === "COMPLETADA" ? " checked" : ""}`}
+                onClick={() => handleToggle(t)}
+                aria-label="Marcar como completada"
+              />
               <div className="task-main">
-                <strong>{t.titulo}</strong>
-                <small>{t.estado}</small>
+                <strong className={t.estado === "COMPLETADA" ? "task-title-done" : ""}>{t.titulo}</strong>
               </div>
               <div className="task-actions">
                 <button type="button" onClick={() => handleDelete(t.id)} title="Eliminar">
-                  Eliminar
+                  <Trash size={16} color="red" />
                 </button>
               </div>
             </li>
