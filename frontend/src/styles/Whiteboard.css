@@ -199,3 +199,10 @@
   flex: 1;
   display: block;
 }
+
+.eyedropper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--text-muted) !important;
+}

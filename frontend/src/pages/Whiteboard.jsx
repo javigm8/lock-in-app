@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Pencil, Eraser, Trash2, Download } from "lucide-react";
+import { ArrowLeft, Pencil, Eraser, Trash2, Download, Pipette } from "lucide-react";
 import "../styles/Whiteboard.css";
 
+// Paleta de colores disponible para dibujar.
 const COLORS = [
   "#F5F3EE",
-  "#1C1E1A",
   "#7FAF82",
   "#E57373",
   "#FFB74D",
@@ -14,6 +14,7 @@ const COLORS = [
   "#CE93D8",
 ];
 
+// Tamaños de pincel y borrador que el usuario puede seleccionar.
 const SIZES = [3, 6, 12, 20];
 
 function Whiteboard() {
@@ -26,6 +27,7 @@ function Whiteboard() {
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState(COLORS[0]);
   const [size, setSize] = useState(SIZES[1]);
+  const [eyeDropperColor, setEyeDropperColor] = useState("#F5F3EE");
 
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const token = localStorage.getItem("token");
@@ -36,9 +38,11 @@ function Whiteboard() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
+    // Inicializa el fondo de la pizarra con color oscuro.
     context.fillStyle = "#1C1E1A";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Carga la última pizarra guardada del usuario si existe.
     fetch(`http://localhost:8080/api/pizarras/usuario/${usuario.id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -58,9 +62,11 @@ function Whiteboard() {
       .catch(console.error);
   }, []);
 
+  // Guarda la pizarra actual en el backend y regresa al dashboard.
   const handleBack = async () => {
     const c = canvasRef.current;
     if (!c) return;
+
     const imagen = c.toDataURL("image/png");
     const body = {
       ...(pizarraId.current ? { id: pizarraId.current } : {}),
@@ -69,6 +75,7 @@ function Whiteboard() {
       version: "1",
       datos: JSON.stringify({ imagen }),
     };
+
     await fetch("http://localhost:8080/api/pizarras", {
       method: "POST",
       headers: {
@@ -77,9 +84,21 @@ function Whiteboard() {
       },
       body: JSON.stringify(body),
     }).catch(console.error);
+
     navigate("/dashboard");
   };
 
+  // Usa la API de cuentagotas del navegador para seleccionar un color de pantalla.
+  const handleEyeDropper = async () => {
+    if (!window.EyeDropper) return;
+    const eyeDropper = new EyeDropper();
+    const result = await eyeDropper.open();
+    setEyeDropperColor(result.sRGBHex);
+    setColor(result.sRGBHex);
+    setTool("pencil");
+  };
+
+  // Convierte las coordenadas del ratón a coordenadas del canvas.
   const getPosition = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
     return {
@@ -88,12 +107,14 @@ function Whiteboard() {
     };
   };
 
+  // Comienza un nuevo trazo al pulsar el ratón sobre el canvas.
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     isDrawing.current = true;
     lastPoint.current = getPosition(e, canvas);
   };
 
+  // Dibuja un segmento según la posición actual y la última posición registrada.
   const draw = (e) => {
     if (!isDrawing.current) return;
     const canvas = canvasRef.current;
@@ -105,8 +126,8 @@ function Whiteboard() {
     context.lineJoin = "round";
 
     if (tool === "eraser") {
-      context.globalCompositeOperation = "destination-out";
-      context.strokeStyle = "rgba(0,0,0,1)";
+      context.globalCompositeOperation = "source-over";
+      context.strokeStyle = "#1C1E1A";
       context.lineWidth = size * 3;
     } else {
       context.globalCompositeOperation = "source-over";
@@ -121,11 +142,13 @@ function Whiteboard() {
     lastPoint.current = current;
   };
 
+  // Finaliza el trazo cuando se suelta el botón del ratón o el cursor abandona el canvas.
   const stopDrawing = () => {
     isDrawing.current = false;
     lastPoint.current = null;
   };
 
+  // Limpia el canvas restaurando el color de fondo.
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -134,6 +157,7 @@ function Whiteboard() {
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
 
+  // Descarga la imagen actual del canvas como PNG.
   const downloadCanvas = () => {
     const canvas = canvasRef.current;
     const link = document.createElement("a");
@@ -195,6 +219,14 @@ function Whiteboard() {
                 title={c}
               />
             ))}
+            <button
+              className="wb-color-btn eyedropper-btn"
+              onClick={handleEyeDropper}
+              title="Cuentagotas"
+              style={{ background: eyeDropperColor }}
+            >
+              <Pipette size={14} />
+            </button>
           </div>
 
           <div className="wb-divider" />
