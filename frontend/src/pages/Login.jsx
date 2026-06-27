@@ -142,16 +142,6 @@ function Login() {
             margin: 0,
           }}
         >
-          ¿Has olvidado tu contraseña?
-        </p>
-        <p
-          style={{
-            color: colors.textMuted,
-            fontSize: "0.85rem",
-            textAlign: "center",
-            margin: 0,
-          }}
-        >
           ¿Primera vez que usas Lock In?{" "}
           <span
             style={{ color: colors.accentMain, cursor: "pointer" }}
@@ -159,6 +149,18 @@ function Login() {
           >
             Crear una cuenta
           </span>
+        </p>
+
+        <p
+          style={{
+            color: colors.textMuted,
+            fontSize: "0.85rem",
+            textAlign: "center",
+            margin: 0,
+            opacity: 0.4,
+          }}
+        >
+          ¿Has olvidado tu contraseña?
         </p>
       </form>
     </div>
