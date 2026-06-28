@@ -139,7 +139,7 @@ function Dashboard() {
             </button>
           </div>
           <div className="panel-body">
-            <Tasks usuario={usuarioActual} />
+            <Tasks usuario={usuarioActual} showLabels={false} />
           </div>
         </article>
 
