@@ -265,3 +265,9 @@
 .note-grid .note-editor {
   display: none;
 } 
+
+.notes-page-wrapper .note-list,
+.notes-page-wrapper .note-grid {
+  max-height: none;
+  overflow: visible;
+}

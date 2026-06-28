@@ -22,7 +22,7 @@ function NotesPage() {
           </button>
         </div>
       </header>
-      <div style={{ padding: "24px 0" }}>
+      <div style={{ padding: "24px 0" }} className="notes-page-wrapper">
         <Notes usuario={usuario} />
       </div>
     </>
