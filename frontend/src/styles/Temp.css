@@ -99,3 +99,24 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+.panel-body .temp-root {
+  gap: 8px;
+  padding: 0;
+}
+
+.temp-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 140px);
+}
+
+.temp-page-wrapper .progress-ring-wrapper {
+  width: min(55vw, 520px);
+  height: min(55vw, 520px);
+}
+
+.temp-page-wrapper .temp-time {
+  font-size: min(11vw, 96px);
+}

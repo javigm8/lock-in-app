@@ -64,6 +64,7 @@ function Temp() {
           className="ctrl-btn"
           onClick={handleReset}
           aria-label="Reiniciar"
+          disabled={running}
         >
           <RotateCcw size={20} />
         </button>

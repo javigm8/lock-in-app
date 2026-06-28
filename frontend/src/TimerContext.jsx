@@ -2,6 +2,10 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const TimerContext = createContext(null);
 
+const BASE = window.location.protocol === "file:"
+  ? "./sounds"
+  : `${window.location.origin}/sounds`;
+
 export function TimerProvider({ children }) {
   const [perfiles, setPerfiles] = useState([]);
   const [perfilActual, setPerfilActual] = useState(null);
@@ -10,6 +14,8 @@ export function TimerProvider({ children }) {
   const [cicloActual, setCicloActual] = useState(1);
   const [sesionCompleta, setSesionCompleta] = useState(false);
   const fechaInicioRef = useRef(null);
+  const audioCiclo = useRef(new Audio(`${BASE}/ciclo_completado.mp3`));
+  const audioSesion = useRef(new Audio(`${BASE}/sesion_completada.mp3`));
 
   const usuario = () => JSON.parse(localStorage.getItem("usuario"));
   const token = () => localStorage.getItem("token");
@@ -93,19 +99,21 @@ export function TimerProvider({ children }) {
           const u = usuario();
           const config = u?.configuracion ? JSON.parse(u.configuracion) : {};
           if (config.notificaciones && Notification.permission === "granted") {
-            new Notification("¡Sesión completada! 🎉", {
+            new Notification("¡Ciclo completado! 🎉", {
               body: `Has completado el ciclo ${cicloActual} de ${ciclosTotal}.`,
             });
           }
 
           if (cicloActual >= ciclosTotal) {
+            audioSesion.current.play().catch(console.error);
             setSesionCompleta(true);
             setCicloActual(1);
           } else {
+            audioCiclo.current.play().catch(console.error);
             setCicloActual((c) => c + 1);
           }
 
-          return perfilActual ? perfilActual.duracion * 60 : 25 * 60;
+          return 0;
         }
         return prev - 1;
       });
@@ -115,8 +123,13 @@ export function TimerProvider({ children }) {
 
   const handlePlayPause = () => {
     if (sesionCompleta) return;
-    if (!running && fechaInicioRef.current === null) {
-      fechaInicioRef.current = new Date().toISOString();
+    if (!running) {
+      if (seconds === 0) {
+        setSeconds(perfilActual ? perfilActual.duracion * 60 : 25 * 60);
+      }
+      if (fechaInicioRef.current === null) {
+        fechaInicioRef.current = new Date().toISOString();
+      }
     }
     setRunning((r) => !r);
   };

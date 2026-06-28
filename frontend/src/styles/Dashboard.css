@@ -86,6 +86,12 @@
   flex-direction: column;
 }
 
+.timer-panel .panel-body {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
 .timer-ring {
   --timer-progress: 360deg;
   width: 170px;
