@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Chart, XAxis, YAxis, Tooltip } from "@highcharts/react";
 import { ColumnSeries } from "@highcharts/react/series/Column";
 import { AreaSeries } from "@highcharts/react/series/Area";
@@ -256,4 +256,4 @@ function Statistics({ usuario }) {
   );
 }
 
-export default Statistics;
+export default memo(Statistics);
