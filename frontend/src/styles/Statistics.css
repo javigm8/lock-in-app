@@ -80,3 +80,25 @@
   text-align: center;
   margin-top: 2rem;
 }
+
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  border: 1px solid var(--lock-border);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.stats-section-title {
+  font-size: 12px;
+  color: var(--lock-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+[data-theme="light"] .stats-section {
+  background: rgba(0, 0, 0, 0.03);
+}

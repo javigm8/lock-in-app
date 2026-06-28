@@ -22,7 +22,7 @@ function StatisticsPage() {
         </div>
       </header>
       <div style={{ padding: "24px 0" }}>
-        <Statistics usuario={usuario} />
+        <Statistics usuario={usuario} carousel={false} />
       </div>
     </>
   );
