@@ -2,14 +2,35 @@
   "name": "frontend",
   "main": "electron.cjs",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "electron": "electron ."
+    "electron": "electron .",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.lockin.app",
+    "productName": "Lock In!",
+    "files": [
+      "dist/**/*",
+      "electron.cjs",
+      "public/sounds/**/*"
+    ],
+    "nsis": {
+      "installerIcon": "public/lock-in.ico",
+      "uninstallerIcon": "public/lock-in.ico"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/lock-in.ico"
+    },
+    "directories": {
+      "output": "release"
+    }
   },
   "dependencies": {
     "@highcharts/react": "^5.1.0",
@@ -24,6 +45,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "electron": "^42.4.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
