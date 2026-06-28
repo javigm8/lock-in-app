@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { Trash } from "lucide-react";
 import "../styles/Notes.css";
 
 const API_BASE = "http://localhost:8080";
 
-function Notes({ usuario }) {
+function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [titulo, setTitulo] = useState("");
@@ -139,32 +140,42 @@ function Notes({ usuario }) {
 
   return (
     <div className="notes-root">
-      <form onSubmit={handleAdd} className="note-form">
-        <input
-          placeholder="Título de la nota..."
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          aria-label="Título de la nota"
-        />
-        <textarea
-          placeholder="Contenido (opcional)..."
-          value={contenido}
-          onChange={(e) => setContenido(e.target.value)}
-          aria-label="Contenido de la nota"
-          rows={2}
-        />
-        <button type="submit">Añadir</button>
-      </form>
+      {showForm && (
+        <form onSubmit={handleAdd} className="note-form">
+          <input
+            placeholder="Título de la nota..."
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            aria-label="Título de la nota"
+          />
+          <textarea
+            placeholder="Contenido (opcional)..."
+            value={contenido}
+            onChange={(e) => setContenido(e.target.value)}
+            aria-label="Contenido de la nota"
+            rows={2}
+          />
+          <button type="submit">Añadir</button>
+        </form>
+      )}
 
       {loading ? (
         <p>Cargando notas...</p>
       ) : notes.length === 0 ? (
         <p className="empty-state">No hay notas</p>
       ) : (
-        <ul className="note-list">
+        <ul className={compact ? "note-grid" : "note-list"}>
           {notes.map((n) => (
-            <li key={n.id} className="note-item">
-              <div className="note-main" onClick={() => handleExpand(n)}>
+            <li
+              key={n.id}
+              className="note-item"
+              onClick={compact && onNoteClick ? onNoteClick : undefined}
+              style={compact && onNoteClick ? { cursor: "pointer" } : {}}
+            >
+              <div
+                className="note-main"
+                onClick={!compact ? () => handleExpand(n) : undefined}
+              >
                 <strong>{n.titulo}</strong>
                 {expandedId !== n.id && n.contenido && (
                   <small className="note-preview">{n.contenido}</small>
@@ -223,7 +234,7 @@ function Notes({ usuario }) {
                     onClick={() => setConfirmDeleteId(n.id)}
                     title="Eliminar"
                   >
-                    Eliminar
+                    <Trash size={16} color="red" />
                   </button>
                 )}
               </div>
