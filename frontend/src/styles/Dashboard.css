@@ -8,11 +8,7 @@
 }
 
 .panel {
-  background: linear-gradient(
-    145deg,
-    var(--lock-surface),
-    var(--lock-bg)
-  );
+  background: var(--lock-surface);
   border: 1px solid var(--lock-border);
   border-radius: 18px;
   padding: 19px;
@@ -35,16 +31,6 @@
   font-size: 18px;
   letter-spacing: -0.02em;
   font-weight: 680;
-}
-
-.panel-badge {
-  color: var(--lock-accent-soft);
-  background: rgba(138, 171, 142, 0.12);
-  border: 1px solid rgba(138, 171, 142, 0.18);
-  border-radius: 999px;
-  padding: 5px 9px;
-  font-size: 10px;
-  white-space: nowrap;
 }
 
 .panel-body {
@@ -90,81 +76,6 @@
   flex: 1;
   justify-content: center;
   align-items: center;
-}
-
-.timer-ring {
-  --timer-progress: 360deg;
-  width: 170px;
-  height: 170px;
-  margin: 2px auto 16px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: conic-gradient(
-    var(--lock-accent) var(--timer-progress),
-    #3b403c 0
-  );
-  position: relative;
-}
-
-.timer-ring::after {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: var(--lock-surface);
-}
-
-.timer-inner {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-}
-
-.timer-inner span {
-  font-size: 34px;
-  letter-spacing: -0.04em;
-  font-weight: 720;
-}
-
-.timer-inner small {
-  color: var(--lock-muted);
-  font-size: 11px;
-  margin-top: 3px;
-}
-
-.timer-controls {
-  margin-top: auto;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.primary-control,
-.secondary-control {
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.primary-control {
-  border: 0;
-  background: var(--lock-accent);
-  color: #162018;
-  padding: 10px 17px;
-  font-weight: 700;
-}
-
-.secondary-control {
-  width: 42px;
-  border: 1px solid var(--lock-border);
-  background: transparent;
-  color: var(--lock-muted);
 }
 
 .stats-panel {
@@ -320,11 +231,6 @@
     grid-template-rows: auto;
   }
 
-  .notes-panel {
-    grid-column: 1 / -1;
-    min-height: 280px;
-  }
-
   .stats-panel {
     grid-column: 1 / -1;
   }
@@ -341,17 +247,8 @@
   }
 
   .panel,
-  .notes-panel,
   .stats-panel,
   .board-panel {
-    grid-column: 1;
-  }
-
-  .stats-content {
-    grid-template-columns: 1fr;
-  }
-
-  .progress-card {
     grid-column: 1;
   }
 

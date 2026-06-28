@@ -41,13 +41,7 @@ button {
 .dashboard-shell {
   min-height: 100vh;
   display: flex;
-  background:
-    radial-gradient(
-      circle at 82% 8%,
-      rgba(138, 171, 142, 0.1),
-      transparent 28%
-    ),
-    var(--lock-bg);
+  background: var(--lock-bg);
   color: var(--lock-text);
 }
 
@@ -139,7 +133,6 @@ button {
   border-bottom: 1px solid var(--lock-border);
 }
 
-.eyebrow,
 .panel-kicker {
   margin: 0 0 3px;
   color: var(--lock-muted);
