@@ -200,7 +200,7 @@ function Dashboard() {
             </button>
           </div>
           <div className="panel-body">
-            <Notes usuario={usuarioActual} />
+            <Notes usuario={usuarioActual} compact={true} showForm={false} onNoteClick={() => navigate("/notas")} />
           </div>
         </article>
 
