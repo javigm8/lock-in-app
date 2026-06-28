@@ -1,15 +1,19 @@
 package com.lockin.backend.controller;
 
-import com.lockin.backend.model.Usuario;
-import com.lockin.backend.security.JwtUtil;
-import com.lockin.backend.service.UsuarioService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lockin.backend.model.Usuario;
+import com.lockin.backend.security.JwtUtil;
+import com.lockin.backend.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -90,6 +94,7 @@ public class AuthController {
         respuesta.put("nombre", usuario.getNombre());
         respuesta.put("usuario", usuario.getUsuario());
         respuesta.put("email", usuario.getEmail());
+        respuesta.put("configuracion", usuario.getConfiguracion());
 
         return ResponseEntity.ok(respuesta);
     }

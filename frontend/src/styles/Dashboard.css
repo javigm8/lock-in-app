@@ -84,6 +84,17 @@
 
 .board-panel {
   grid-column: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.board-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.board-panel .panel-body {
+  flex: 1;
+  min-height: 0;
 }
 
 .board-preview {
@@ -272,4 +283,32 @@
   .panel {
     padding: 15px;
   }
+}
+.notes-panel {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.notes-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
+.notes-panel .panel-body .notes-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-panel .panel-body .note-grid {
+  flex: 1;
+  max-height: none;
+  overflow-y: auto;
 }
