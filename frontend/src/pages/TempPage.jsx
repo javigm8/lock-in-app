@@ -7,8 +7,10 @@ import { useTimer } from "../TimerContext";
 function TempPage() {
   const navigate = useNavigate();
   const [usuario] = useState(() => JSON.parse(localStorage.getItem("usuario")));
+  // Estados de perfiles predefinidos, personalizados y seleccionado
   const { perfiles, perfilActual, setPerfilActual, running, cargarPerfiles } = useTimer();
 
+  // Formulario para crear nuevo perfil personalizado
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [nuevaDuracion, setNuevaDuracion] = useState("");
@@ -102,6 +104,7 @@ function TempPage() {
       </header>
 
       {showCustomForm && (
+        // Formulario para crear perfil personalizado
         <div className="perfil-form" style={{ margin: "12px 0" }}>
           <input className="perfil-form-input" placeholder="Nombre" value={nuevoNombre} onChange={(e) => setNuevoNombre(e.target.value)} />
           <label>Duración (min)
@@ -114,6 +117,7 @@ function TempPage() {
         </div>
       )}
 
+      {/* Pantalla principal del temporizador */}
       <div className="temp-page-wrapper">
         <Temp />
       </div>

@@ -3,6 +3,7 @@ import { useTimer } from "../TimerContext";
 import "../styles/Temp.css";
 
 function Temp() {
+  // Obtiene datos del timer desde el context
   const {
     perfilActual,
     seconds,
@@ -13,10 +14,12 @@ function Temp() {
     handleReset,
   } = useTimer();
 
+  // Formatea el tiempo en MM:SS
   const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
   const remainingSeconds = String(seconds % 60).padStart(2, "0");
   const timeLabel = `${minutes}:${remainingSeconds}`;
 
+  // Calcula progreso para anillo visual
   const ciclosTotal = perfilActual?.ciclos ?? 1;
   const progress = perfilActual
     ? 1 - seconds / (perfilActual.duracion * 60)
@@ -24,6 +27,7 @@ function Temp() {
 
   return (
     <div className="temp-root">
+      {/* Anillo de progreso visual con tiempo */}
       <div className="temp-display">
         <div className="progress-ring-wrapper">
           <svg viewBox="0 0 120 120" className="progress-ring">
@@ -41,6 +45,7 @@ function Temp() {
         </div>
       </div>
 
+      {/* Estado de sesión o número de ciclo actual */}
       {sesionCompleta ? (
         <p className="sesion-completa">¡Sesión completada! 🎉</p>
       ) : (
@@ -49,6 +54,7 @@ function Temp() {
         </p>
       )}
 
+      {/* Controles de play/pausa y reinicio */}
       <div className="temp-controls">
         <button
           type="button"

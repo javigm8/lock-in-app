@@ -5,6 +5,7 @@ import "../styles/Notes.css";
 const API_BASE = "http://localhost:8080";
 
 function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }) {
+  // Estados para lista de notas, formulario nuevo y edición
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [titulo, setTitulo] = useState("");
@@ -98,6 +99,7 @@ function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }
     }
   };
 
+  // Abre/cierra nota para editar
   const handleExpand = (note) => {
     if (expandedId === note.id) {
       setExpandedId(null);
@@ -107,6 +109,7 @@ function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }
     }
   };
 
+  // Guarda cambios en nota editada
   const handleSaveEdit = async (note) => {
     const token = localStorage.getItem("token");
     const payload = {
@@ -138,8 +141,10 @@ function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }
     }
   };
 
+  // Renderiza formulario nuevo, lista de notas y editor
   return (
     <div className="notes-root">
+      {/* Formulario para crear nueva nota */}
       {showForm && (
         <form onSubmit={handleAdd} className="note-form">
           <input
@@ -159,6 +164,7 @@ function Notes({ usuario, compact = false, showForm = true, onNoteClick = null }
         </form>
       )}
 
+      {/* Lista de notas */}
       {loading ? (
         <p>Cargando notas...</p>
       ) : notes.length === 0 ? (

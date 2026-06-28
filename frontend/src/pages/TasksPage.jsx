@@ -6,6 +6,7 @@ import "../styles/Tasks.css";
 
 const API_BASE = "http://localhost:8080";
 
+// Paleta de colores para etiquetas personalizadas
 const COLORS = [
   "#E57373", "#FFB74D", "#FFF176", "#7FAF82",
   "#64B5F6", "#BA68C8", "#F48FB1", "#90A4AE"
@@ -14,6 +15,7 @@ const COLORS = [
 function TasksPage() {
   const navigate = useNavigate();
   const [usuario] = useState(() => JSON.parse(localStorage.getItem("usuario")));
+  // Estado de etiquetas, filtros activos y formulario nueva etiqueta
   const [labels, setLabels] = useState([]);
   const [activeFilter, setActiveFilter] = useState([]);
   const [newName, setNewName] = useState("");
@@ -34,6 +36,7 @@ function TasksPage() {
 
   const handleCreateLabel = async () => {
     if (!newName.trim()) return;
+    // Crea nueva etiqueta personalizada
     const res = await fetch(`${API_BASE}/api/etiquetas`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -48,6 +51,7 @@ function TasksPage() {
   };
 
   const handleDeleteLabel = async (id) => {
+    // Elimina etiqueta y quita filtros relacionados
     const res = await fetch(`${API_BASE}/api/etiquetas/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
@@ -59,6 +63,7 @@ function TasksPage() {
   };
 
   const toggleFilter = (id) => {
+    // Alterna filtro de etiqueta
     setActiveFilter((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );

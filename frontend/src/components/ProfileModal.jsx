@@ -11,6 +11,7 @@ function ProfileModal({ usuario, onClose, onSave }) {
     ? JSON.parse(usuario.configuracion)
     : {};
 
+  // Campos editables del perfil
   const [nombre, setNombre] = useState(usuario?.nombre ?? "");
   const [email, setEmail] = useState(usuario?.email ?? "");
   const [password, setPassword] = useState("");
@@ -29,6 +30,7 @@ function ProfileModal({ usuario, onClose, onSave }) {
   };
 
   const handleGuardar = () => {
+    // Valida contraseña si se intenta cambiar
     if (password.trim()) {
       const passwordRegex =
         /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
@@ -40,6 +42,7 @@ function ProfileModal({ usuario, onClose, onSave }) {
       }
     }
     setError("");
+    // Prepara datos para actualizar en backend
     const datos = {};
     if (nombre.trim()) datos.nombre = nombre.trim();
     if (email.trim()) datos.email = email.trim();
@@ -48,6 +51,7 @@ function ProfileModal({ usuario, onClose, onSave }) {
     const nuevaConfig = JSON.stringify({ ...config, avatar });
     datos.configuracion = nuevaConfig;
 
+    // Envía cambios al backend
     fetch(`http://localhost:8080/api/usuarios/${usuario.id}/perfil`, {
       method: "PUT",
       headers: {

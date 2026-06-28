@@ -45,6 +45,7 @@ function Statistics({ usuario, carousel = true }) {
   const [cargando, setCargando] = useState(true);
   const [slide, setSlide] = useState(0);
 
+  // Gráficos disponibles en carrusel
   const SLIDES = [
     "Tiempo de focus semanal",
     "Sesiones por día esta semana",
@@ -97,6 +98,7 @@ function Statistics({ usuario, carousel = true }) {
 
   if (cargando) return <p className="stats-empty">Cargando estadísticas...</p>;
 
+  // Estilos para gráficos
   const labelStyle = { color: colors.textMuted, fontSize: "11px" };
 
   const chartBase = {

@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
 function Login() {
+  // Accede a tema global y navegación
   const { colors, theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  // Estados para formulario de login
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -59,6 +61,7 @@ function Login() {
         overflow: "hidden",
       }}
     >
+      {/* Botón toggle tema */}
       <button
         onClick={toggleTheme}
         style={{

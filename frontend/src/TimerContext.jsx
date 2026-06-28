@@ -2,11 +2,13 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const TimerContext = createContext(null);
 
+// Detecta si la app se ejecuta desde archivo local (Electron) o web
 const BASE = window.location.protocol === "file:"
   ? "./sounds"
   : `${window.location.origin}/sounds`;
 
 export function TimerProvider({ children }) {
+  // Estado para perfiles de sesión, temporizador y ciclos
   const [perfiles, setPerfiles] = useState([]);
   const [perfilActual, setPerfilActual] = useState(null);
   const [seconds, setSeconds] = useState(25 * 60);
@@ -48,7 +50,7 @@ export function TimerProvider({ children }) {
     cargarPerfiles();
   }, []);
 
-  // Resetear timer cuando cambia el perfil
+  // Reinicia timer cuando cambia el perfil
   useEffect(() => {
     if (!perfilActual) return;
     setSeconds(perfilActual.duracion * 60);
@@ -95,7 +97,7 @@ export function TimerProvider({ children }) {
           const ciclosTotal = perfilActual?.ciclos ?? 1;
           guardarSesion(cicloActual);
 
-          // Notificación si está activada
+          // Muestra notificación si está activada
           const u = usuario();
           const config = u?.configuracion ? JSON.parse(u.configuracion) : {};
           if (config.notificaciones && Notification.permission === "granted") {
@@ -121,6 +123,7 @@ export function TimerProvider({ children }) {
     return () => clearInterval(interval);
   }, [running, cicloActual, perfilActual]);
 
+  // Inicia/pausa el timer
   const handlePlayPause = () => {
     if (sesionCompleta) return;
     if (!running) {
@@ -134,6 +137,7 @@ export function TimerProvider({ children }) {
     setRunning((r) => !r);
   };
 
+  // Reinicia timer a duración original
   const handleReset = () => {
     setRunning(false);
     setSeconds(perfilActual ? perfilActual.duracion * 60 : 25 * 60);

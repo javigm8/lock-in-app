@@ -14,16 +14,16 @@ const SONIDOS = [
 ];
 
 function AmbientPlayer() {
-  // Estado local del reproductor.
+  // Estado del reproductor de sonidos ambientales
   const [abierto, setAbierto] = useState(false);
   const [sonidoActivo, setSonidoActivo] = useState(null);
   const [volumen, setVolumen] = useState(0.5);
 
-  // Referencias para el audio y el popup.
+  // Referencias para audio y popup
   const audioRef = useRef(null);
   const popupRef = useRef(null);
 
-  // Cierra el popup al hacer clic fuera.
+  // Cierra el popup al hacer clic fuera
   useEffect(() => {
     const handleClickFuera = (e) => {
       if (popupRef.current && !popupRef.current.contains(e.target)) {
@@ -34,14 +34,14 @@ function AmbientPlayer() {
     return () => document.removeEventListener("mousedown", handleClickFuera);
   }, [abierto]);
 
-  // Sincroniza el volumen con el audio activo.
+  // Sincroniza volumen con audio
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volumen;
     }
   }, [volumen]);
 
-  // Alterna o cambia el sonido ambiental.
+  // Cambia o detiene el sonido ambiental
   const handleSonido = (sonido) => {
     if (sonidoActivo === sonido.id) {
       audioRef.current.pause();
@@ -64,7 +64,7 @@ function AmbientPlayer() {
     setSonidoActivo(sonido.id);
   };
 
-  // Detiene la reproducción actual.
+  // Detiene reproducción actual
   const handleStop = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -76,8 +76,10 @@ function AmbientPlayer() {
 
   const reproduciendo = sonidoActivo !== null;
 
+  // Botón de sonido y popup con lista de sonidos
   return (
     <div className="ambient-wrapper" ref={popupRef}>
+      {/* Botón toggle sonido ambiental */}
       <button
         type="button"
         className={`nav-button ambient-btn ${reproduciendo ? "ambient-active" : ""}`}
@@ -89,6 +91,7 @@ function AmbientPlayer() {
         {reproduciendo && <span className="ambient-dot" />}
       </button>
 
+      {/* Popup con opciones de sonido y volumen */}
       {abierto && (
         <div className="ambient-popup">
           <p className="ambient-title">Sonido ambiental</p>

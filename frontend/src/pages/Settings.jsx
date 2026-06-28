@@ -10,6 +10,7 @@ function Settings() {
   const [usuario] = useState(() => JSON.parse(localStorage.getItem("usuario")));
   const token = localStorage.getItem("token");
 
+  // Estado para perfiles disponibles y selección de perfil por defecto
   const [perfiles, setPerfiles] = useState([]);
   const [perfilPorDefecto, setPerfilPorDefecto] = useState(null);
   const [confirmarEliminar, setConfirmarEliminar] = useState(false);

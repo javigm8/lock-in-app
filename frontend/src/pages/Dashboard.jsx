@@ -12,13 +12,16 @@ import ProfileModal from "../components/ProfileModal";
 function Dashboard() {
   const navigate = useNavigate();
 
+  // Carga datos del usuario desde localStorage
   const [usuarioActual, setUsuarioActual] = useState(() => {
     const usuarioGuardado = localStorage.getItem("usuario");
     return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
   });
 
+  // Obtiene estado del timer desde el context
   const { running, perfiles, perfilActual, setPerfilActual } = useTimer();
 
+  // Estados para menú de usuario, pizarra preview y modal de perfil
   const [menuAbierto, setMenuAbierto] = useState(false);
   const menuRef = useRef(null);
   const [pizarraPreview, setPizarraPreview] = useState(null);
@@ -74,12 +77,14 @@ function Dashboard() {
       )}
 
       <header className="topbar">
+        {/* Título y logo */}
         <div>
           <h1>
             Lock <span>In!</span>
           </h1>
         </div>
 
+        {/* Indicador de sesión activa */}
         <div className="topbar-center">
           <span className={`focus-dot ${running ? "running" : ""}`} />
           <strong>
@@ -87,6 +92,7 @@ function Dashboard() {
           </strong>
         </div>
 
+        {/* Menú de usuario con opciones */}
         <div className="profile-wrapper" ref={menuRef}>
           <button
             className="profile-button"
@@ -123,6 +129,7 @@ function Dashboard() {
         </div>
       </header>
 
+      {/* Paneles de contenido: tareas, timer, notas, etc */}
       <section className="dashboard-grid">
         <article className="panel tasks-panel">
           <div className="panel-heading">

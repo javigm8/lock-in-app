@@ -5,6 +5,7 @@ import "../styles/Tasks.css";
 const API_BASE = "http://localhost:8080";
 
 function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }) {
+  // Estado de tareas, formulario de nueva tarea y asociación de etiquetas
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState("");
@@ -49,6 +50,7 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
 
   useEffect(() => { loadTasks(); }, [usuario]);
 
+  // Crea nueva tarea en el backend
   const handleAdd = async (e) => {
     e.preventDefault();
     if (!title.trim() || !usuario?.id) return;
@@ -68,6 +70,7 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
     } catch (err) { console.error(err); }
   };
 
+  // Alterna estado entre PENDIENTE y COMPLETADA
   const handleToggle = async (task) => {
     const nuevoEstado = task.estado === "COMPLETADA" ? "PENDIENTE" : "COMPLETADA";
     try {
@@ -80,6 +83,7 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
     } catch (err) { console.error(err); }
   };
 
+  // Elimina tarea del backend
   const handleDelete = async (id) => {
     try {
       const res = await fetch(`${API_BASE}/api/tareas/${id}`, {
@@ -89,6 +93,7 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
     } catch (err) { console.error(err); }
   };
 
+  // Asigna o quita etiqueta de una tarea
   const toggleEtiquetaEnTarea = async (tarea, etiqueta) => {
     const asignadas = tareaEtiquetas[tarea.id] || [];
     const yaAsignada = asignadas.some((e) => e.id === etiqueta.id);
@@ -120,12 +125,14 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
     }
   };
 
+  // Filtra tareas según etiquetas seleccionadas
   const tareasFiltradas = filtroActivo.length === 0
     ? tasks
     : tasks.filter((t) =>
         (tareaEtiquetas[t.id] || []).some((e) => filtroActivo.includes(e.id))
       );
 
+  // Renderiza lista de tareas con checkbox, etiquetas y acciones
   return (
     <div className="tasks-root">
       <form onSubmit={handleAdd} className="task-form">
@@ -138,6 +145,7 @@ function Tasks({ usuario, etiquetas = [], filtroActivo = [], showLabels = true }
         <button type="submit">Añadir</button>
       </form>
 
+      {/* Lista de tareas */}
       {loading ? (
         <p>Cargando tareas...</p>
       ) : tareasFiltradas.length === 0 ? (

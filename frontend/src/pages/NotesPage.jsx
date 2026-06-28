@@ -5,6 +5,7 @@ import Notes from "../components/Notes";
 
 function NotesPage() {
   const navigate = useNavigate();
+  // Carga usuario actual desde localStorage
   const [usuario] = useState(() => JSON.parse(localStorage.getItem("usuario")));
 
   return (

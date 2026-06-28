@@ -1,3 +1,4 @@
+// Punto de entrada de la app React con contextos globales
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'

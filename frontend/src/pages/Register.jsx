@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 function Register() {
-  const { colors } = useTheme()
-  const navigate = useNavigate()
+  // Accede a tema global y navegación
+  const { colors } = useTheme();
+  const navigate = useNavigate();
+  // Estados para formulario de registro
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -63,8 +65,7 @@ function Register() {
           fontSize: '1.5rem',
           lineHeight: 1,
         }}
-      >
-        ←
+      >        {/* Botón volver a login */}        ←
       </div>
 
       <h1 style={{ color: colors.textPrimary, fontSize: '2rem', marginBottom: '2rem' }}>

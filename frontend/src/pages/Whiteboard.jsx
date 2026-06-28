@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Pencil, Eraser, Trash2, Download, Pipette } from "lucide-react";
 import "../styles/Whiteboard.css";
 
-// Paleta de colores disponible para dibujar.
+// Paleta de colores para dibujar
 const COLORS = [
   "#F5F3EE",
   "#7FAF82",
@@ -14,17 +14,19 @@ const COLORS = [
   "#CE93D8",
 ];
 
-// Tamaños de pincel y borrador que el usuario puede seleccionar.
+// Tamaños de pincel disponibles
 const SIZES = [3, 6, 12, 20];
 
 function Whiteboard() {
   const navigate = useNavigate();
+  // Referencias para canvas y estado de dibujo
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
   const lastPoint = useRef(null);
   const pizarraId = useRef(null);
   const cargado = useRef(false);
 
+  // Herramientas disponibles: pincel, borrador, cuentagotas
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState(COLORS[0]);
   const [size, setSize] = useState(SIZES[1]);
@@ -39,11 +41,11 @@ function Whiteboard() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Inicializa el fondo de la pizarra con color oscuro.
+    // Inicializa fondo oscuro
     context.fillStyle = "#1C1E1A";
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Carga la última pizarra guardada del usuario si existe.
+    // Carga pizarra guardada si existe
     fetch(`http://localhost:8080/api/pizarras/usuario/${usuario.id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -64,13 +66,13 @@ function Whiteboard() {
             cargado.current = true;
           }
         } else {
-          cargado.current = true; // primera vez, canvas vacío listo para guardar
+          cargado.current = true; // Canvas vacío, listo para guardar
         }
       })
       .catch(console.error);
   }, []);
 
-  // Guarda la pizarra actual en el backend y regresa al dashboard.
+  // Guarda pizarra en backend y regresa
   const handleBack = async () => {
     const canvas = canvasRef.current;
     if (!canvas || !cargado.current) return;
@@ -96,7 +98,7 @@ function Whiteboard() {
     navigate("/dashboard");
   };
 
-  // Usa la API de cuentagotas del navegador para seleccionar un color de pantalla.
+  // Selecciona color con cuentagotas del navegador
   const handleEyeDropper = async () => {
     if (!window.EyeDropper) return;
     const eyeDropper = new EyeDropper();
@@ -106,7 +108,7 @@ function Whiteboard() {
     setTool("pencil");
   };
 
-  // Convierte las coordenadas del ratón a coordenadas del canvas.
+  // Convierte coordenadas del mouse a coordenadas del canvas
   const getPosition = (e, canvas) => {
     const rect = canvas.getBoundingClientRect();
     return {
@@ -115,14 +117,14 @@ function Whiteboard() {
     };
   };
 
-  // Comienza un nuevo trazo al pulsar el ratón sobre el canvas.
+  // Inicia trazo
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     isDrawing.current = true;
     lastPoint.current = getPosition(e, canvas);
   };
 
-  // Dibuja un segmento según la posición actual y la última posición registrada.
+  // Dibuja línea según posición actual
   const draw = (e) => {
     if (!isDrawing.current) return;
     const canvas = canvasRef.current;
@@ -150,13 +152,13 @@ function Whiteboard() {
     lastPoint.current = current;
   };
 
-  // Finaliza el trazo cuando se suelta el botón del ratón o el cursor abandona el canvas.
+  // Finaliza trazo
   const stopDrawing = () => {
     isDrawing.current = false;
     lastPoint.current = null;
   };
 
-  // Limpia el canvas restaurando el color de fondo.
+  // Limpia canvas
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -165,7 +167,7 @@ function Whiteboard() {
     context.fillRect(0, 0, canvas.width, canvas.height);
   };
 
-  // Descarga la imagen actual del canvas como PNG.
+  // Descarga canvas como imagen PNG
   const downloadCanvas = () => {
     const canvas = canvasRef.current;
     const link = document.createElement("a");
@@ -197,6 +199,7 @@ function Whiteboard() {
       </header>
 
       <div className="whiteboard-body">
+        {/* Barra lateral con herramientas: pincel, colores, tamaño */}
         <aside className="wb-toolbar">
           <div className="wb-section">
             <button
@@ -253,6 +256,7 @@ function Whiteboard() {
           </div>
         </aside>
 
+        {/* Canvas para dibujar */}
         <canvas
           ref={canvasRef}
           className="wb-canvas"

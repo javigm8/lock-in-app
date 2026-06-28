@@ -10,6 +10,7 @@ import {
 import AmbientPlayer from "./components/AmbientPlayer";
 import "./styles/AppLayout.css";
 
+// Opciones de navegación principal para la barra lateral
 const navItems = [
   { icon: <Home size={22} />, label: "Inicio", path: "/dashboard" },
   { icon: <ClipboardList size={22} />, label: "Tareas", path: "/tareas" },
@@ -24,6 +25,7 @@ function AppLayout() {
 
   return (
     <div className="dashboard-shell">
+      {/* Barra lateral con navegación, sonido ambiental y ajustes */}
       <aside className="sidebar" aria-label="Navegación principal">
         <button
           className="brand-mark"
@@ -50,6 +52,7 @@ function AppLayout() {
         </nav>
 
         <div className="sidebar-bottom">
+          {/* Reproductor de sonidos y botón ajustes */}
           <AmbientPlayer />
           <button
             className="nav-button"
@@ -63,6 +66,7 @@ function AppLayout() {
         </div>
       </aside>
 
+      {/* Área principal de contenido dinámico */}
       <main className="dashboard-main">
         <Outlet />
       </main>

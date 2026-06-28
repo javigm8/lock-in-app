@@ -5,6 +5,7 @@ import Statistics from "../components/Statistics";
 
 function StatisticsPage() {
   const navigate = useNavigate();
+  // Carga usuario actual desde localStorage
   const [usuario] = useState(() => JSON.parse(localStorage.getItem("usuario")));
 
   return (

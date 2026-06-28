@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
+// Paleta de colores para tema claro
 export const lightColors = {
   bgDark: '#F5F3EE',
   bgSurface: '#FFFFFF',
@@ -11,6 +12,7 @@ export const lightColors = {
   textMuted: '#6F776E',
 }
 
+// Paleta de colores para tema oscuro
 export const darkColors = {
   bgDark: '#1C1E1A',
   bgSurface: '#272B23',
