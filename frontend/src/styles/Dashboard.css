@@ -217,6 +217,23 @@
   min-height: 200px;
 }
 
+.tasks-panel {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.tasks-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
 .avatar-img {
   width: 100%;
   height: 100%;
